@@ -1,13 +1,13 @@
 const { SlashCommandBuilder } = require('discord.js');
 const axios = require('axios');
-const { token } = require('/config.json');
+const {lichess_token} = require('../config.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('createtournament')
 		.setDescription('creates a tournament')
 
-        /*.addStringOption(option =>
+        .addStringOption(option =>
             option.setName('name')
                 .setDescription('The tournament name. Leave empty to get a random Grandmaster name')
                 .setRequired(true))
@@ -37,34 +37,20 @@ module.exports = {
 
         .addStringOption(option =>
             option.setName('description')
-            .setDescription('Anything you want to tell players about the tournament')),*/,
+            .setDescription('Anything you want to tell players about the tournament')),
 
 	async execute(interaction) {
 
-        axios.post('https://lichess.org/api/tournament',{
-            /*teambBattleByTeam: 'taskn-satranc',
-            name: interaction.options.getString('name'),
-            clock: {
-                increment: 0,
-                limit: 180
-            },
-            //minutes: parseInt(interaction.options.getString('minutes'),
-            minutes: interaction.options.getValue('minutes'),*/
-            
-            headers:{
-                Authorization: `Bearer ${token}`,
-            },
+        const params = new URLSearchParams();
 
-            teambBattleByTeam: 'taskn-satranc',
-            name: 'bot deneme',
-            clock: {
-                increment: 2,
-                limit: 3
-            },
-            minutes: 60,
-            description: 'bot ile oluşturulan deneme turnuvasi.'
-        });
+        params.append('teambBattleByTeam','taskn-satranc');
+        params.append('name',interaction.options.getString('name'));
+        params.append('clockTime',interaction.options.getString('clockTime'));
+        params.append('clockIncrement',interaction.options.getString('clockIncrement'));
+        params.append('minutes',interaction.options.getString('minutes'));
+        params.append('description', interaction.options.getString('description'));
 
+        axios.post("https://lichess.org/api/tournament", params, {headers: {Authorization: 'Bearer ' + lichess_token}});
 
 		await interaction.reply('Tournament Created : ' + interaction.options.getString('name'));
 	},
