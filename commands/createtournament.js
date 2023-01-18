@@ -12,28 +12,28 @@ module.exports = {
                 .setDescription('The tournament name. Leave empty to get a random Grandmaster name')
                 .setRequired(true))
 
-        .addNumberOption(option => 
-            option.setName('clockTime')
+        .addStringOption(option => 
+            option.setName('clocktime')
                 .setDescription('Clock initial time in minutes')
                 .setRequired(true))
 
-        .addIntegerOption(option =>
-            option.setName('clockIncrement')
+        .addStringOption(option =>
+            option.setName('clockincrement')
                 .setDescription('Clock increment in seconds')
                 .setRequired(true))
 
-        .addIntegerOption(option =>
+        .addStringOption(option =>
             option.setName('minutes')
                 .setDescription('How long the tournament lasts, in minutes')
                 .setRequired(true))
 
-        .addIntegerOption(option =>
-            option.setName('waitMinutes')
+        .addStringOption(option =>
+            option.setName('waitminutes')
             .setDescription('How long to wait before starting the tournament, from now, in minutes'))
 
-        .addIntegerOption(option =>
-            option.setName('startDate')
-            .setDescription('Timestamp (in milliseconds) to start the tournament at a given date and time. Overrides the waitMinutes setting'))
+        .addStringOption(option =>
+            option.setName('startdate')
+            .setDescription('Timestamp to start the tournament at a given date and time. Overrides the waitMinutes setting'))
 
         .addStringOption(option =>
             option.setName('description')
@@ -45,8 +45,8 @@ module.exports = {
 
         params.append('teambBattleByTeam','taskn-satranc');
         params.append('name',interaction.options.getString('name'));
-        params.append('clockTime',interaction.options.getString('clockTime'));
-        params.append('clockIncrement',interaction.options.getString('clockIncrement'));
+        params.append('clockTime',interaction.options.getString('clocktime'));
+        params.append('clockIncrement',interaction.options.getString('clockincrement'));
         params.append('minutes',interaction.options.getString('minutes'));
         params.append('description', interaction.options.getString('description'));
 
