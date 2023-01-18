@@ -12,6 +12,8 @@ Ben Visual Studio Code kullanıyorum size de tavsiye ederim. GitHub kısmında k
 ### 2. Dosya Kurulum
 
  1. Öncelikle aşağıdaki fotoğraftaki gibi Code>Local>Download ZIP seçeneklerini seçerek dosyayı indirin.
+
+![image](https://user-images.githubusercontent.com/108292163/213280105-85fd561b-89f6-483d-9ada-7b85cc4041cd.png)
  
  2. Satranc101DiscordBot-master.zip adlı bir zip dosyası inecek. İçinde yine aynı isimle bir klasör olacak. Bu klasörü masaüstünüze (nerede çalışacaksanız oraya) çıkartın. Ve klasörün isminin sonundaki "-master" kısmını silin. Son hali böyle olacak "Satranc101DiscordBot"
  
