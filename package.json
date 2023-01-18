@@ -1,0 +1,24 @@
+{
+  "name": "satranc101discordbot",
+  "version": "1.0.0",
+  "description": "1. Kaynak Kod Düzenleyicisi \r Ben Visual Studio Code kullanıyorum size de tavsiye ederim. GitHub kısmında kolaylıklar sunuyor. [Bağlantıya](https://www.sachinsf.com/how-to-push-the-code-from-vs-code-to-github/) tıklayarak inceleyebilirsiniz.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omersuatdemir/Satranc101DiscordBot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/omersuatdemir/Satranc101DiscordBot/issues"
+  },
+  "homepage": "https://github.com/omersuatdemir/Satranc101DiscordBot#readme",
+  "dependencies": {
+    "axios": "^1.2.3",
+    "discord.js": "^14.7.1"
+  }
+}
