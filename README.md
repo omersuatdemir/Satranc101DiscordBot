@@ -50,5 +50,6 @@ Oluşturduğunuz dosyanın içine aşağıdaki metni yapıştırın. Daha sonra 
 ```
 
 Dosyamız artık üzerinde çalışılmaya hazır. GitHub bağlantılarını yaptıktan sonra dosyamızın son şekli aşağıdaki gibi olacaktır.
+
 ![image](https://user-images.githubusercontent.com/108292163/213273713-257f28c9-2ed4-445a-9e07-d1ff6b5fdd55.png)
 
