@@ -17,7 +17,7 @@ Ben Visual Studio Code kullanıyorum size de tavsiye ederim. GitHub kısmında k
  
  2. Satranc101DiscordBot-master.zip adlı bir zip dosyası inecek. İçinde yine aynı isimle bir klasör olacak. Bu klasörü masaüstünüze (nerede çalışacaksanız oraya) çıkartın. Ve klasörün isminin sonundaki "-master" kısmını silin. Son hali böyle olacak "Satranc101DiscordBot"
  
-### 3. Proje Oluşturma
+### 3. Proje Oluşturma (Gerek kalmadı)
 
 Dosyada terminal (power shell veya komut istemcisi de olur) açın. Daha sonra
 `npm init -y` komutunu çalıştırın. Bu işlem dosyada `package.json` ve `package-lock.json` adında iki dosya oluşturmalı.
