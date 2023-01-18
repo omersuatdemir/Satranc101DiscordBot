@@ -22,7 +22,7 @@ Ben Visual Studio Code kullanıyorum size de tavsiye ederim. GitHub kısmında k
 Dosyada terminal (power shell veya komut istemcisi de olur) açın. Daha sonra
 `npm init -y` komutunu çalıştırın. Bu işlem dosyada `package.json` ve `package-lock.json` adında iki dosya oluşturmalı.
 
-### 4. Gerekli Paketler (Gerek kalmadı node-packages klasörünü yükledik)
+### 4. Gerekli Paketler
 
  1. Discord.js
  Yine dosyanın içinde açık olan bir terminalden `npm install discord.js` komutunu çalıştırın. İşlem bittiğinde `node-modules` adlı bir klasör oluşmuş olması gerek.
