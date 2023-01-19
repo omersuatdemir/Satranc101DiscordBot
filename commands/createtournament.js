@@ -39,19 +39,28 @@ module.exports = {
             option.setName('description')
             .setDescription('Anything you want to tell players about the tournament')),
 
-	async execute(interaction) {
+	execute(interaction) {
+        
+        var informationMessage;
 
         const params = new URLSearchParams();
 
-        params.append('teambBattleByTeam','taskn-satranc');
+        params.append('conditions.teamMember.teamId','taskn-satranc');
         params.append('name',interaction.options.getString('name'));
         params.append('clockTime',interaction.options.getString('clocktime'));
         params.append('clockIncrement',interaction.options.getString('clockincrement'));
         params.append('minutes',interaction.options.getString('minutes'));
         params.append('description', interaction.options.getString('description'));
 
-        axios.post("https://lichess.org/api/tournament", params, {headers: {Authorization: 'Bearer ' + lichess_token}});
+        axios.post("https://lichess.org/api/tournament", params, {headers: {Authorization: 'Bearer ' + lichess_token}})
+        .then(function (response) {
+            informationMessage = 'Turnuva Kuruldu!\nTurnuva Adı: ' +  response.data.fullName
+            + '\nBağlantı: https://lichess.org/tournament/' + response.data.id
+            + '\nBaşlangıç: ' + response.data.startsAt
+            + '\nSüre: ' + response.data.minutes
+            + '\nTempo: ' + (response.data.clock.limit / 60) + '+' + response.data.clock.increment;
 
-		await interaction.reply('Tournament Created : ' + interaction.options.getString('name'));
+            interaction.reply(informationMessage);
+        });
 	},
 };
