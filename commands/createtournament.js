@@ -33,7 +33,7 @@ module.exports = {
 
         .addStringOption(option =>
             option.setName('startdate')
-            .setDescription('Timestamp to start the tournament at a given date and time. Overrides the waitMinutes setting'))
+            .setDescription('MM/DD/YYYY hh:mm:ss , Overrides the waitMinutes setting'))
 
         .addStringOption(option =>
             option.setName('description')
@@ -50,6 +50,16 @@ module.exports = {
         params.append('clockTime',interaction.options.getString('clocktime'));
         params.append('clockIncrement',interaction.options.getString('clockincrement'));
         params.append('minutes',interaction.options.getString('minutes'));
+
+        if(interaction.options.getString('startdate')==null){
+            params.append('waitMinutes',interaction.options.getString('waitminutes'));
+        }
+        else{
+            var myDate = interaction.options.getString('startdate');
+            var datum = Date.parse(myDate);
+            params.append('startDate',datum);
+        }
+
         params.append('description', interaction.options.getString('description'));
 
         axios.post("https://lichess.org/api/tournament", params, {headers: {Authorization: 'Bearer ' + lichess_token}})
