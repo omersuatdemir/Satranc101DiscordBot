@@ -4,7 +4,7 @@ const ChessImageGenerator = require("chess-image-generator")
 let generator = new ChessImageGenerator({
     size:256,
     light: 'rgb(200, 200, 200)',
-    dark: '#333333',
+    dark: 'rgb(100, 100,100)',
     style: 'merida',
     flipped: true
 })
