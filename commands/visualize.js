@@ -5,7 +5,7 @@ let generator = new ChessImageGenerator({
     size:512,
     light: '#dee3e6',
     dark: '#8ca2ad',
-    style: 'merida',
+    style: 'alpha',
     flipped: true
 })
 
