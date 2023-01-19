@@ -2,9 +2,9 @@ const { SlashCommandBuilder, AttachmentBuilder } = require("discord.js");
 const ChessImageGenerator = require("chess-image-generator")
 
 let generator = new ChessImageGenerator({
-    size:256,
-    light: 'rgb(200, 200, 200)',
-    dark: '#333333',
+    size:512,
+    light: '#dee3e6',
+    dark: '#8ca2ad',
     style: 'merida',
     flipped: true
 })
