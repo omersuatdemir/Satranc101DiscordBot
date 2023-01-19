@@ -30,10 +30,12 @@ module.exports = {
         .setRequired(true)
     )
 
-        .addStringOption(option =>
-            option.setName('minutes')
-                .setDescription('How long the tournament lasts, in minutes')
-                .setRequired(true))
+    .addStringOption((option) =>
+      option
+        .setName("minutes")
+        .setDescription("How long the tournament lasts, in minutes")
+        .setRequired(true)
+    )
 
     .addStringOption((option) =>
       option
