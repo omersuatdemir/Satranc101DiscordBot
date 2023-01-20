@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
 const axios = require("axios");
-const { lichess_token } = require("../config.json");
+const { lichess_token, tournamentPermRoleID} = require("../config.json");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -62,7 +62,7 @@ module.exports = {
     ),
 
   execute(interaction) {
-    if (interaction.member.roles.cache.has(1062802221055627394)) {
+    if (interaction.member.roles.cache.has(tournamentPermRoleID)) {
       var informationMessage;
 
       const params = new URLSearchParams();
@@ -70,32 +70,23 @@ module.exports = {
       params.append("conditions.teamMember.teamId", "taskn-satranc");
       params.append("name", interaction.options.getString("name"));
       params.append("clockTime", interaction.options.getString("clocktime"));
-      params.append(
-        "clockIncrement",
-        interaction.options.getString("clockincrement")
-      );
+      params.append("clockIncrement",interaction.options.getString("clockincrement"));
       params.append("minutes", interaction.options.getString("minutes"));
 
       if (interaction.options.getString("startdate") == null) {
-        params.append(
-          "waitMinutes",
-          interaction.options.getString("waitminutes")
-        );
+        params.append("waitMinutes",interaction.options.getString("waitminutes"));
+
       } else {
+
         var myDate = interaction.options.getString("startdate");
         var datum = Date.parse(myDate);
         params.append("startDate", datum);
       }
 
-      params.append(
-        "description",
-        interaction.options.getString("description")
-      );
+      params.append("description",interaction.options.getString("description"));
 
       axios
-        .post("https://lichess.org/api/tournament", params, {
-          headers: { Authorization: "Bearer " + lichess_token },
-        })
+        .post("https://lichess.org/api/tournament", params, {headers: { Authorization: "Bearer " + lichess_token }})
         .then(function (response) {
           informationMessage =
             "Turnuva Kuruldu!\nTurnuva Adı: " +
