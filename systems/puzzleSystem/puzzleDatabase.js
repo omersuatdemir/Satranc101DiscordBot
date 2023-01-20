@@ -7,7 +7,7 @@ class PuzzleDatabase
     loadRandomPuzzle()
     {
         // temp solution for reading a huge file
-        const DATABASE_LENGTH = 3000000;
+        const DATABASE_LENGTH = 1424107;
 
         let v = new PuzzleDatabase();
         v._data = [];
