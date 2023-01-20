@@ -18,11 +18,7 @@ Ben Visual Studio Code kullanıyorum size de tavsiye ederim. GitHub kısmında k
 
 #### Puzzle Veritabanı Kurulumu
 
-*Bu işlemi otomatikleştiren bir script oluşturulana kadar bu adım uygulanmalı* 
-
-1. Lichess puzzle veritabanını [indirin](https://database.lichess.org/#puzzles)
-2. İndirdiğiniz `.zst` uzantılı dosyayı data klasörü içine çıkartın
-3. Çıkarttığınız dosyanın adı puzzle_db.csv olmalı
+Veritabanı data klasörünün içinde zip dosyası olarak geliyor. Tek yapmanız gereken zip'in içindeki dosyayı aynı klasöre çıkarmak.
 
 ### 3. Konfigürasyon Dosyası (config.json)
 
