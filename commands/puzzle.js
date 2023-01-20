@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 
-const { PuzzleSystem } = require("../systems/puzzleSystem")
+const { PuzzleSystem } = require("../systems/puzzleSystem/puzzleSystem")
 const { ChessboardBuilder } = require('../utility/chessboardBuilder');
 
 module.exports = {
@@ -18,7 +18,7 @@ module.exports = {
 
         if (activePuzzle === undefined)
         {
-            await interaction.reply("Şuan aktif bir bulmaca bulunmuyor")
+            await interaction.reply({content: "Şuan aktif bir bulmaca bulunmuyor", ephemeral: true})
         } else
         {
             let move = interaction.options.getString("move")
@@ -27,6 +27,9 @@ module.exports = {
 
             switch (result.status)
             {
+                case "alreadySolved":
+                    await interaction.reply({content:"Bu bulmacayı zaten çözdün", ephemeral: true})
+                    return
                 case "progress":
                     {
                         let buffer = await ChessboardBuilder.create()
