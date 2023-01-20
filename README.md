@@ -12,7 +12,7 @@ Ben Visual Studio Code kullanıyorum size de tavsiye ederim. GitHub kısmında k
 ### 2. Kurulum
 
 1. Repo'yu klonlayın
-`git clone https://https://github.com/omersuatdemir/Satranc101DiscordBot`
+`git clone https://github.com/omersuatdemir/Satranc101DiscordBot`
  
 2. komut satırından klonladığınız klasöre cd atıp, `npm install` çalıştırın
 
