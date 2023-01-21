@@ -41,8 +41,8 @@ module.exports = {
       option
         .setName("waitminutes")
         .setDescription(
-          "How long to wait before starting the tournament, from now, in minutes"
-        )
+          "How long to wait before starting the tournament, from now, in minutes")
+        .setRequired(true)
     )
 
     .addStringOption((option) =>
@@ -62,6 +62,7 @@ module.exports = {
     ),
 
   execute(interaction) {
+
     if (interaction.member.roles.cache.has(tournamentPermRoleID)) {
       var informationMessage;
 
