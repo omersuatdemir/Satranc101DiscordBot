@@ -4,6 +4,8 @@ const { default: axios } = require('axios');
 const { Client, GatewayIntentBits, AttachmentBuilder, EmbedBuilder, time } = require('discord.js');
 const { discord_token , announcementChannelID} = require('../config.json');
 
+const { pmall } = require("./functions/pmall");
+
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 function announceTourney(t_id){
@@ -43,7 +45,9 @@ function announceTourney(t_id){
                 + '\nTurnuva Linki: https://lichess.org/tournament/' + response.data.id
                 + '\nTempo: ' + response.data.clock.limit/60 + '+' + response.data.clock.increment)
                 .setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png')
-            client.channels.cache.get(announcementChannelID).send({ embeds: [announceEmbed] });   
+            client.channels.cache.get(announcementChannelID).send({ embeds: [announceEmbed] });
+
+            pmall('Turnuvamız ' + str1 + ' Başlıyor!\nhttps://lichess.org/tournament/' + response.data.id);
         })
     })
     .catch(function (error) {
