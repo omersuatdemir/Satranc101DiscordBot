@@ -4,6 +4,7 @@ const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { discord_token, puzzleChannelId } = require('./config.json');
 const { PuzzleSystem } = require("./systems/puzzleSystem/puzzleSystem")
 const { getresults } = require("./functions/getresults");
+const { announceTourney } = require("./functions/announcement");
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -49,6 +50,7 @@ client.login(discord_token);
 client.on("ready", ()=>{
 	var x = PuzzleSystem.start(client, puzzleChannelId);
 	x.schedule();
-	getresults('O9j5J9DI');
+	//getresults('O9j5J9DI');
+	//announceTourney('u9FIF1UO');
 	//client.channels.cache.get('1001118831042887692').send('asdqwe31');
 })

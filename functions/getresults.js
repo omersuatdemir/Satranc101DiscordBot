@@ -12,11 +12,12 @@ function getresults(t_id){
 
         var json = "[" + response.data.replace(/\r?\n/g, ",").replace(/,\s*$/, "") + "]";
         var jsondata = JSON.parse(json);
+        
         client.login(discord_token);
 
         client.on("ready", ()=>{
-          const exampleEmbed = new EmbedBuilder()
-          .setColor(0x0099FF)
+          const resultsEmbed = new EmbedBuilder()
+          .setColor(0xf9d505)
           .setTitle('🎉 Turnuvamız bitti! Katılan herkese teşekkür ederiz. 🎉')
           .setURL('https://lichess.org/tournament/' + t_id)
           .setDescription(`**🏆Kazananlar🏆**`)
@@ -34,7 +35,7 @@ function getresults(t_id){
             { name: `Turnuva Linki`, value: 'https://lichess.org/tournament/' + t_id }
           )
         
-        client.channels.cache.get(announcementChannelID).send({ embeds: [exampleEmbed] });   
+        client.channels.cache.get(announcementChannelID).send({ embeds: [resultsEmbed] });   
         })
     })
     .catch(function (error) {
