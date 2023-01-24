@@ -4,7 +4,7 @@ const { default: axios } = require('axios');
 const { Client, GatewayIntentBits, AttachmentBuilder, EmbedBuilder, time } = require('discord.js');
 const { discord_token , announcementChannelID} = require('../config.json');
 
-const { pmall } = require("./functions/pmall");
+const { pmall } = require("./pmall");
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
