@@ -1,6 +1,9 @@
 const { SlashCommandBuilder } = require("discord.js");
 const axios = require("axios");
-const { lichess_token, tournamentPermRoleID} = require("../config.json");
+const { lichess_token, tournamentPermRoleID, lichessTeamID} = require("../config.json");
+const schedule = require('node-schedule');
+const ann = require('../functions/announcement');
+const res123 = require('../functions/getresults');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -86,8 +89,7 @@ module.exports = {
 
       params.append("description",interaction.options.getString("description"));
 
-      axios
-        .post("https://lichess.org/api/tournament", params, {headers: { Authorization: "Bearer " + lichess_token }})
+      axios.post("https://lichess.org/api/tournament", params, {headers: { Authorization: "Bearer " + lichess_token }})
         .then(function (response) {
           informationMessage =
             "Turnuva Kuruldu!\nTurnuva Adı: " +
@@ -104,6 +106,19 @@ module.exports = {
             response.data.clock.increment;
 
           interaction.reply(informationMessage);
+
+          const date1 = new Date(response.data.startsAt - (5*60*1000));
+          const job1 = schedule.scheduleJob(date1, function(){
+            ann.announceTourney(response.data.id);
+          });
+          job1.schedule();
+
+          const date2 = new Date(response.data.startsAt + ((response.data.minutes + 1)*60*1000));
+          const job2 = schedule.scheduleJob(date2, function() {
+            res123.getresults(response.data.id);
+          });
+          job2.schedule();
+
         });
     } else {
       interaction.reply("Turnuva kurulamadı, gerekli yetkiye sahip değilsiniz");
