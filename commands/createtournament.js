@@ -67,7 +67,7 @@ module.exports = {
   execute(interaction)
   {
 
-    if (true /*interaction.member.roles.cache.has(tournamentPermRoleID)*/)
+    if (interaction.member.roles.cache.has(tournamentPermRoleID))
     {
       var informationMessage;
 
