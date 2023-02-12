@@ -73,7 +73,7 @@ module.exports = {
 
       const params = new URLSearchParams();
 
-      //params.append("conditions.teamMember.teamId", "taskn-satranc");
+      params.append("conditions.teamMember.teamId", "taskn-satranc");
       params.append("name", interaction.options.getString("name"));
       params.append("clockTime", interaction.options.getString("clocktime"));
       params.append("clockIncrement", interaction.options.getString("clockincrement"));
@@ -126,7 +126,6 @@ module.exports = {
           date2.setMinutes(date2.getMinutes() + response.data.minutes + 1);
 
           console.log(`min: ${response.data.minutes}`);
-          //date2.setSeconds(date2.getSeconds());
           console.log(`tournament date: ${date2}`)
           const job2 = schedule.scheduleJob(date2, function ()
           {
