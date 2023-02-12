@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
 const axios = require("axios");
-const { lichess_token, tournamentPermRoleID, lichessTeamID} = require("../config.json");
+const { lichess_token, tournamentPermRoleID, lichessTeamID } = require("../config.json");
 const schedule = require('node-schedule');
 const ann = require('../functions/announcement');
 const res123 = require('../functions/getresults');
@@ -64,40 +64,45 @@ module.exports = {
         )
     ),
 
-  execute(interaction) {
+  execute(interaction)
+  {
 
-    if (interaction.member.roles.cache.has(tournamentPermRoleID)) {
+    if (true /*interaction.member.roles.cache.has(tournamentPermRoleID)*/)
+    {
       var informationMessage;
 
       const params = new URLSearchParams();
 
-      params.append("conditions.teamMember.teamId", "taskn-satranc");
+      //params.append("conditions.teamMember.teamId", "taskn-satranc");
       params.append("name", interaction.options.getString("name"));
       params.append("clockTime", interaction.options.getString("clocktime"));
-      params.append("clockIncrement",interaction.options.getString("clockincrement"));
+      params.append("clockIncrement", interaction.options.getString("clockincrement"));
       params.append("minutes", interaction.options.getString("minutes"));
 
-      if (interaction.options.getString("startdate") == null) {
-        params.append("waitMinutes",interaction.options.getString("waitminutes"));
+      if (interaction.options.getString("startdate") == null)
+      {
+        params.append("waitMinutes", interaction.options.getString("waitminutes"));
 
-      } else {
+      } else
+      {
 
         var myDate = interaction.options.getString("startdate");
         var datum = Date.parse(myDate);
         params.append("startDate", datum);
       }
 
-      params.append("description",interaction.options.getString("description"));
+      params.append("description", interaction.options.getString("description"));
 
-      axios.post("https://lichess.org/api/tournament", params, {headers: { Authorization: "Bearer " + lichess_token }})
-        .then(function (response) {
+      axios.post("https://lichess.org/api/tournament", params, { headers: { Authorization: "Bearer " + lichess_token } })
+        .then(function (response)
+        {
           informationMessage =
             "Turnuva Kuruldu!\nTurnuva Adı: " +
             response.data.fullName +
             "\nBağlantı: https://lichess.org/tournament/" +
             response.data.id +
             "\nBaşlangıç: " +
-            response.data.startsAt +
+            new Date(Date.parse(response.data.startsAt)).toLocaleString() +
             "\nSüre: " +
             response.data.minutes +
             "\nTempo: " +
@@ -107,20 +112,39 @@ module.exports = {
 
           interaction.reply(informationMessage);
 
-          const date1 = new Date(response.data.startsAt - (5*60*1000));
-          const job1 = schedule.scheduleJob(date1, function(){
+
+          const date1 = new Date(Date.parse(response.data.startsAt));
+          date1.setSeconds(date1.getSeconds() - (5 * 60));
+          console.log(response.data.startsAt);
+          console.log(`announcment date: ${date1}`)
+          const job1 = schedule.scheduleJob(date1, function ()
+          {
             ann.announceTourney(response.data.id);
           });
-          job1.schedule();
 
-          const date2 = new Date(response.data.startsAt + ((response.data.minutes + 1)*60*1000));
-          const job2 = schedule.scheduleJob(date2, function() {
+          const date2 = new Date(Date.parse(response.data.startsAt));
+          date2.setMinutes(date2.getMinutes() + response.data.minutes + 1);
+
+          console.log(`min: ${response.data.minutes}`);
+          //date2.setSeconds(date2.getSeconds());
+          console.log(`tournament date: ${date2}`)
+          const job2 = schedule.scheduleJob(date2, function ()
+          {
             res123.getresults(response.data.id);
           });
-          job2.schedule();
 
-        });
-    } else {
+        }).catch(function (e)
+        {
+          console.log(`Could not create tournament. Error: ${e}, Details:`);
+          try{
+            console.log(e.response.data);
+          }catch(_){}
+          interaction.reply("Turnuva oluşturulamadı. Lütfen daha sonra tekrar deneyin");
+
+        })
+
+    } else
+    {
       interaction.reply("Turnuva kurulamadı, gerekli yetkiye sahip değilsiniz");
     }
   },
