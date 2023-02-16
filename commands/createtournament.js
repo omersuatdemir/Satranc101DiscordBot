@@ -73,7 +73,7 @@ module.exports = {
 
       const params = new URLSearchParams();
 
-      params.append("conditions.teamMember.teamId", "taskn-satranc");
+      params.append("conditions.teamMember.teamId", lichessTeamID);
       params.append("name", interaction.options.getString("name"));
       params.append("clockTime", interaction.options.getString("clocktime"));
       params.append("clockIncrement", interaction.options.getString("clockincrement"));
@@ -116,7 +116,7 @@ module.exports = {
           const date1 = new Date(Date.parse(response.data.startsAt));
           date1.setSeconds(date1.getSeconds() - (5 * 60));
           console.log(response.data.startsAt);
-          console.log(`announcment date: ${date1}`)
+          console.log(`announcement date: ${date1}`)
           const job1 = schedule.scheduleJob(date1, function ()
           {
             ann.announceTourney(response.data.id);
@@ -141,7 +141,6 @@ module.exports = {
           interaction.reply("Turnuva oluşturulamadı. Lütfen daha sonra tekrar deneyin");
 
         })
-
     } else
     {
       interaction.reply("Turnuva kurulamadı, gerekli yetkiye sahip değilsiniz");

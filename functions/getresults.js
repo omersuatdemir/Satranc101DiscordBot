@@ -42,6 +42,3 @@ function getresults(t_id){
       console.log(error);
   });
 }
-
-
-

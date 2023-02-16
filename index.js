@@ -2,9 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { discord_token, puzzleChannelId } = require('./config.json');
-const { PuzzleSystem } = require("./systems/puzzleSystem/puzzleSystem")
-const { getresults } = require("./functions/getresults");
-const { announceTourney } = require("./functions/announcement");
+const { PuzzleSystem } = require("./systems/puzzleSystem/puzzleSystem");
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
