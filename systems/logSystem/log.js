@@ -39,8 +39,3 @@ class Log {
         })
     }
 }
-
-
-const log = new Log()
-
-log.CreateErrorLog('Merhaba')
