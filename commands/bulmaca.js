@@ -1,15 +1,14 @@
 const { SlashCommandBuilder } = require('discord.js');
-
-const { PuzzleSystem } = require("../systems/puzzleSystem/puzzleSystem")
+const { PuzzleSystem } = require("../systems/puzzleSystem/puzzleSystem");
 const { ChessboardBuilder } = require('../utility/chessboardBuilder');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('puzzle')
-        .setDescription('Solve the current puzzle!')
+        .setName('bulmaca')
+        .setDescription('Mevcut bulmacayi çözün')
         .addStringOption(option =>
-            option.setName("move")
-                .setDescription("Move to make in SAN format")
+            option.setName("hamle")
+                .setDescription("Hamlelerinizi SAN formatinda yazin.")
                 .setRequired(true)),
     async execute(interaction)
     {
@@ -21,7 +20,7 @@ module.exports = {
             await interaction.reply({content: "Şuan aktif bir bulmaca bulunmuyor", ephemeral: true})
         } else
         {
-            let move = interaction.options.getString("move")
+            let move = interaction.options.getString("hamle")
 
             var result = activePuzzle.checkSolution(interaction.user.id, move)
 
@@ -52,7 +51,7 @@ module.exports = {
 
                         await interaction.reply({ files: [buffer], content: `Tebrikler, bulmacayı çözdün!`, ephemeral: true })
 
-                        PuzzleSystem.instance.solvePuzzle(interaction.user)
+                        PuzzleSystem.instance.solvePuzzle(interaction.user.id)
 
                         return
                     }

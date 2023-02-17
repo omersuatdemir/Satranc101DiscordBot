@@ -6,17 +6,19 @@ const MongoClient = require("mongodb").MongoClient;
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('linkaccount')
-		.setDescription('Link your Lichess account.')
+		.setName('teyit')
+		.setDescription('Lichess hesabinizi teyit edin.')
 		.addStringOption((option) =>
 		option
 		  .setName('id')
-		  .setDescription('ID of your lichess account.')
+		  .setDescription('Lichess hesabinizin ID\'si')
 		  .setRequired(true)
 	  ),
 	async execute(interaction) {
 
+		//kullanıcıdan teyit için isteyeceğimiz metni bir değişkene atıyoruz.
 		const userName = interaction.user.username+'#'+interaction.user.discriminator;
+		//lichess api ile kullanıcının lichess hesabının biyografi (açıklama) bölümüne erişiyoruz.
 		axios.get('https://lichess.org/api/user/'+interaction.options.getString('id'))
 		.then(function (response){
 
@@ -33,16 +35,20 @@ module.exports = {
 			.setDescription('Lütfen Discord etiketinizi \"' + userName + '\" Lichess hesabınızın biyografisine koyun.')
 			.setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png');
 
+			//biyografiyi bir değişkene atıyoruz.
 			const lcBio = response.data.profile.bio;
+			//teyit metni ile biyografiyi kıyaslıyoruz.
 			if(userName == lcBio)
 			{
 
+				//teyit gerçekleşirse veri tabanı işlemleri başlıyor.
 				const client = new MongoClient(dbConnectionString);
 				async function run() 
 				{
 				  try 
 				  {
 					const result = await client.db('denemeDB').collection('denemeCol').findOne({ discordID: interaction.user.id });
+					//üyenin daha önce kaydı yoksa yeni kayıt oluşturuyoruz.
 					if (result == null) 
 					{
 
@@ -78,7 +84,7 @@ module.exports = {
 						}
 					}
 					else{
-
+						//üyenin daha önceden kaydı varsa lichess id sini yeni girilen id ile değiştiriyoruz.
 						try {
 							const updateDoc = 
 							{

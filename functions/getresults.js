@@ -8,15 +8,21 @@ const MongoClient = require("mongodb").MongoClient;
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
+//sonucunu istediğimiz turnuvanın id'sini parametre olarak alıyoruz.
 function getresults(t_id){
+    //axios ile lichess api'ına erişerek turnuva sonuçlarını içeren bir nd-json objesi alıyoruz.
     axios.get('https://lichess.org/api/tournament/' + t_id + '/results')
     .then(function (response) {
 
+    //nd-json objesini, üzerinde işlem yapabilmemizin kolaylaşması için json dizisine çeviriyoruz.
     var json = "[" + response.data.replace(/\r?\n/g, ",").replace(/,\s*$/, "") + "]";
     var jsondata = JSON.parse(json);
 
     async function run() {
 
+      /*turnuvada ilk üçe giren lichess hesaplarının id'lerini kendi veritabanımızda aratarak herhangi bir discord hesabına bağlı olup
+      olmadıklarını inceliyoruz. bu kontroller sonucunda da duyuru yapılırken lichess veya discord hesabı olarak duyurulmalarına
+      karar veriyoruz.*/
       checkFirst = false;
       try {
         const client = new MongoClient(dbConnectionString);
