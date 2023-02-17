@@ -48,5 +48,5 @@ client.on("ready", ()=>{
 
 	//starting puzzle system
 	var x = PuzzleSystem.start(client, puzzleChannelId);
-	x.startRandomPuzzle();
+	x.schedule();
 })
