@@ -1,22 +1,24 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const { plus2kRoleID, dbConnectionString } = require("../config.json");
 const axios = require("axios");
 const MongoClient = require("mongodb").MongoClient;
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('getrole')
-		.setDescription('Get the role.'),
+		.setName('rolver')
+		.setDescription('Teyitli hesabiniz kontrol edilecek.'),
 	async execute(interaction) {
 
+		//kayıtların olduğu tablodan, kullanıcının id'sine göre bir kayıt bulmaya çalışıyor.
 		const client = new MongoClient(dbConnectionString);
 		async function run() {
 		  try {
 			const result = await client.db('denemeDB').collection('denemeCol').findOne({ discordID: interaction.user.id });
 			console.log(result);
 
+			//kayıt bulunursa istenilen rol için yeterlilikler kontrol ediliyor.
 			if(result==null){
-				interaction.reply('Kayıtlı lichess hesabınız bulunamadı.\n\`/linkaccount\` kullanmayı deneyin');
+				interaction.reply('Teyitli lichess hesabınız bulunamadı.\n\`/teyit\` kullanmayı deneyin');
 			}
 			else{
 				axios.get('https://lichess.org/api/user/'+result.lichessID)
@@ -41,6 +43,7 @@ module.exports = {
 						prov = true;
 					}
 		
+					//yeterlilikler sağlanıyorsa üyeye istenilen rolü veriyor.
 					if(prov){
 						interaction.member.roles.add(plus2kRoleID);
 						interaction.reply('2000+ doğrulandı.');

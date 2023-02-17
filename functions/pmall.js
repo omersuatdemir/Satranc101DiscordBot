@@ -8,6 +8,7 @@ function pmall(message){
     const params = new URLSearchParams();
     params.append('message',message);
 
+    //parametre olarak alınan metin, id'si verilen takıma duyuru olarak atılıyor.
     axios.post('https://lichess.org/team/'+lichessTeamID+'/pm-all', params, {headers: { Authorization: "Bearer " + lichess_token }})
     .then(function (response) {
         console.log(response);
