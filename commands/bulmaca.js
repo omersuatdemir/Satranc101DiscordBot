@@ -5,10 +5,10 @@ const { ChessboardBuilder } = require('../utility/chessboardBuilder');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('bulmaca')
-        .setDescription('Solve the current puzzle!')
+        .setDescription('Mevcut bulmacayi çözün')
         .addStringOption(option =>
-            option.setName("move")
-                .setDescription("Move to make in SAN format")
+            option.setName("hamle")
+                .setDescription("Hamlelerinizi SAN formatinda yazin.")
                 .setRequired(true)),
     async execute(interaction)
     {
@@ -20,7 +20,7 @@ module.exports = {
             await interaction.reply({content: "Şuan aktif bir bulmaca bulunmuyor", ephemeral: true})
         } else
         {
-            let move = interaction.options.getString("move")
+            let move = interaction.options.getString("hamle")
 
             var result = activePuzzle.checkSolution(interaction.user.id, move)
 

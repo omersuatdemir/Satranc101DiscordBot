@@ -5,7 +5,7 @@ const MongoClient = require("mongodb").MongoClient;
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('rolteyit')
+		.setName('rolver')
 		.setDescription('Teyitli hesabiniz kontrol edilecek.'),
 	async execute(interaction) {
 
