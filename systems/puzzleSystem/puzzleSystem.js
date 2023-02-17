@@ -67,16 +67,20 @@ class PuzzleSystem
         await channel.send({ files: [buffer], content: `Bulmaca zamanı! Rating: ||${this.activePuzzle.rating}||` })
     }
 
+    //bir üye bulmacayı çözdüğünde çalışan fonksiyon.
+    //üyenin discord id'si parametre ile alınıyor.
     async solvePuzzle(solverId)
     {
         if (!this.activePuzzle.solved)
         {   
+            //üyenin id'si üzerinden bulmaca puanlarının olduğu tablo sorgulanıyor.
             var p_points;
             const db_client = new MongoClient(dbConnectionString);
 
             try {
                 const result = await db_client.db('denemeDB').collection('denemeCol2').findOne({ discordID: solverId });
 
+                //eğer üyenin bulmaca puanı kaydı yoksa yeni kayıt oluşturuluyor ve az önce çözdüğü bulmaca için 1 puan ekleniyor.
                 if(result == null){
 
                   p_points = 1;
@@ -90,6 +94,7 @@ class PuzzleSystem
 
                 }else{
 
+                  //üyenin bulmaca puanı kaydı varsa eski puanın bir fazlası yeni puan olarak değiştiriliyor.
                   p_points = parseInt(result.puzzlePoints) + 1;
                   const updateDoc = 
                   {
@@ -112,6 +117,7 @@ class PuzzleSystem
                 .setPov(this.activePuzzle.playerSide)
                 .generateBuffer();
 
+            //kanala gönderilecek embed mesaj oluşturuluyor.
             var solvedEmbed = new EmbedBuilder()
                 .setColor(0x2cee1a)
                 .setTitle('Bulmaca Çözüldü!')

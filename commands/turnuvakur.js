@@ -1,20 +1,20 @@
 const { SlashCommandBuilder } = require("discord.js");
-const axios = require("axios");
 const { lichess_token, tournamentPermRoleID, lichessTeamID } = require("../config.json");
+const axios = require("axios");
 const schedule = require('node-schedule');
 const ann = require('../functions/announcement');
 const res123 = require('../functions/getresults');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("createtournament")
-    .setDescription("creates a tournament")
+    .setName("turnuvakur")
+    .setDescription("Turnuva kurar.")
 
     .addStringOption((option) =>
       option
         .setName("name")
         .setDescription(
-          "The tournament name. Leave empty to get a random Grandmaster name"
+          "Turnuva adı."
         )
         .setRequired(true)
     )
@@ -22,21 +22,21 @@ module.exports = {
     .addStringOption((option) =>
       option
         .setName("clocktime")
-        .setDescription("Clock initial time in minutes")
+        .setDescription("Başlangiç süresi.")
         .setRequired(true)
     )
 
     .addStringOption((option) =>
       option
         .setName("clockincrement")
-        .setDescription("Clock increment in seconds")
+        .setDescription("Hamle başina artiş.")
         .setRequired(true)
     )
 
     .addStringOption((option) =>
       option
         .setName("minutes")
-        .setDescription("How long the tournament lasts, in minutes")
+        .setDescription("Turnuva süresi.")
         .setRequired(true)
     )
 
@@ -44,7 +44,7 @@ module.exports = {
       option
         .setName("waitminutes")
         .setDescription(
-          "How long to wait before starting the tournament, from now, in minutes")
+          "Turnuvaya kalan dakikalar.")
         .setRequired(true)
     )
 
@@ -52,7 +52,7 @@ module.exports = {
       option
         .setName("startdate")
         .setDescription(
-          "MM/DD/YYYY hh:mm:ss , Overrides the waitMinutes setting"
+          "MM/DD/YYYY hh:mm:ss"
         )
     )
 
@@ -60,17 +60,19 @@ module.exports = {
       option
         .setName("description")
         .setDescription(
-          "Anything you want to tell players about the tournament"
+          "Açiklama"
         )
     ),
 
   execute(interaction)
   {
 
+    //Kullanıcının yetkisi, gerekli rol ile kontrol ediliyor.
     if (interaction.member.roles.cache.has(tournamentPermRoleID))
     {
       var informationMessage;
 
+      //API'a gönderilecek parametreler ekleniyor.
       const params = new URLSearchParams();
 
       params.append("conditions.teamMember.teamId", lichessTeamID);
@@ -79,6 +81,7 @@ module.exports = {
       params.append("clockIncrement", interaction.options.getString("clockincrement"));
       params.append("minutes", interaction.options.getString("minutes"));
 
+      //startDate veya waitMinutes yöntemi seçiliyor.
       if (interaction.options.getString("startdate") == null)
       {
         params.append("waitMinutes", interaction.options.getString("waitminutes"));
@@ -91,8 +94,10 @@ module.exports = {
         params.append("startDate", datum);
       }
 
+      params.append("rated", false); //Sunucu içi turnuvalar puansız olarak ayarlanıyor.
       params.append("description", interaction.options.getString("description"));
 
+      //API'a post isteği gönderiliyor ve yanıt ile bilgilendirme mesajı hazırlanıyor.
       axios.post("https://lichess.org/api/tournament", params, { headers: { Authorization: "Bearer " + lichess_token } })
         .then(function (response)
         {
@@ -113,8 +118,9 @@ module.exports = {
           interaction.reply(informationMessage);
 
 
+          // date1 = duyuru tarihi
           const date1 = new Date(Date.parse(response.data.startsAt));
-          date1.setSeconds(date1.getSeconds() - (5 * 60));
+          date1.setSeconds(date1.getSeconds() - (30 * 60));
           console.log(response.data.startsAt);
           console.log(`announcement date: ${date1}`)
           const job1 = schedule.scheduleJob(date1, function ()
@@ -122,6 +128,7 @@ module.exports = {
             ann.announceTourney(response.data.id);
           });
 
+          // date2 = sonuçların açıklanma tarihi
           const date2 = new Date(Date.parse(response.data.startsAt));
           date2.setMinutes(date2.getMinutes() + response.data.minutes + 1);
 

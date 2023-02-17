@@ -4,7 +4,7 @@ const { ChessboardBuilder } = require('../utility/chessboardBuilder');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('puzzle')
+        .setName('bulmaca')
         .setDescription('Solve the current puzzle!')
         .addStringOption(option =>
             option.setName("move")
