@@ -3,7 +3,7 @@ const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { discord_token, puzzleChannelId } = require('./config.json');
 
-const getRes = require('./functions/getresults')
+const {PuzzleSystem} = require('./systems/puzzleSystem/puzzleSystem')
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -44,9 +44,9 @@ for (const file of commandFiles) {
 client.login(discord_token);
 
 
-// starting systems
-
 client.on("ready", ()=>{
-	/*var x = PuzzleSystem.start(client, puzzleChannelId);
-	x.schedule();*/
+
+	//starting puzzle system
+	var x = PuzzleSystem.start(client, puzzleChannelId);
+	x.startRandomPuzzle();
 })

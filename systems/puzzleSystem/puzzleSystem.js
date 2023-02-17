@@ -1,9 +1,11 @@
-const { ChessboardBuilder } = require("../../utility/chessboardBuilder")
+const { ChessboardBuilder } = require("../../utility/chessboardBuilder");
+const { EmbedBuilder } = require('discord.js');
+const { PuzzleDatabase } = require("./puzzleDatabase");
+const { dbConnectionString } = require("../../config.json");
 
-
-const schedule = require("node-schedule")
-const scheduleConfig = require("./puzzleScheduleConfig")
-const { PuzzleDatabase } = require("./puzzleDatabase")
+const schedule = require("node-schedule");
+const scheduleConfig = require("./puzzleScheduleConfig");
+const MongoClient = require("mongodb").MongoClient;
 
 class PuzzleSystem
 {
@@ -62,25 +64,63 @@ class PuzzleSystem
             .setPov(this.activePuzzle.playerSide)
             .generateBuffer()
 
-        await channel.send({ files: [buffer], content: `Bulmaca zamanı! Rating: ${this.activePuzzle.rating}` })
+        await channel.send({ files: [buffer], content: `Bulmaca zamanı! Rating: ||${this.activePuzzle.rating}||` })
     }
 
-    async solvePuzzle(solver)
+    async solvePuzzle(solverId)
     {
         if (!this.activePuzzle.solved)
-        {
+        {   
+            var p_points;
+            const db_client = new MongoClient(dbConnectionString);
+
+            try {
+                const result = await db_client.db('denemeDB').collection('denemeCol2').findOne({ discordID: solverId });
+
+                if(result == null){
+
+                  p_points = 1;
+                  const doc = 
+                  {
+                      discordID: solverId,
+                      puzzlePoints: p_points 
+                  }
+
+                  await db_client.db('denemeDB').collection('denemeCol2').insertOne(doc);
+
+                }else{
+
+                  p_points = parseInt(result.puzzlePoints) + 1;
+                  const updateDoc = 
+                  {
+                      $set: 
+                      {
+                          puzzlePoints: p_points
+                      },
+                  };
+
+                  await db_client.db('denemeDB').collection('denemeCol2').updateOne({ discordID: solverId }, updateDoc);
+                }
+
+              } finally {
+                await db_client.close();
+              }
+
             let channel = this.client.channels.cache.get(this.channelId)
             let buffer = await ChessboardBuilder.create()
                 .setFen(this.activePuzzle.getSolutionFen())
                 .setPov(this.activePuzzle.playerSide)
-                .generateBuffer()
+                .generateBuffer();
 
+            var solvedEmbed = new EmbedBuilder()
+                .setColor(0x2cee1a)
+                .setTitle('Bulmaca Çözüldü!')
+                .setURL(this.activePuzzle.getLichessPuzzleLink())
+                .setDescription(`<@${solverId}> bulmacayı çözdü!\nToplam bulmaca puanınız: \`${p_points}\``
+                + `\nÇözüm: ||${this.activePuzzle.getMovesSan().join(", ")}||\nBulmaca Linki: ${this.activePuzzle.getLichessPuzzleLink()}`)
+                .setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png');
 
-            // TODO Send solution gif?
-
-            channel.send({
-                content: `${solver} bulmacayı çözdü! Çözüm: ||${this.activePuzzle.getMovesSan().join(", ")}||\nBulmaca Linki: ${this.activePuzzle.getLichessPuzzleLink()}`
-            });
+            channel.send({embeds: [solvedEmbed] });
         }
     }
 

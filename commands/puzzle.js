@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-
-const { PuzzleSystem } = require("../systems/puzzleSystem/puzzleSystem")
+const { PuzzleSystem } = require("../systems/puzzleSystem/puzzleSystem");
 const { ChessboardBuilder } = require('../utility/chessboardBuilder');
 
 module.exports = {
@@ -52,7 +51,7 @@ module.exports = {
 
                         await interaction.reply({ files: [buffer], content: `Tebrikler, bulmacayı çözdün!`, ephemeral: true })
 
-                        PuzzleSystem.instance.solvePuzzle(interaction.user)
+                        PuzzleSystem.instance.solvePuzzle(interaction.user.id)
 
                         return
                     }
