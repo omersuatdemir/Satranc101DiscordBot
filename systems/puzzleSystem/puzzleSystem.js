@@ -78,7 +78,7 @@ class PuzzleSystem
             const db_client = new MongoClient(dbConnectionString);
 
             try {
-                const result = await db_client.db('denemeDB').collection('denemeCol2').findOne({ discordID: solverId });
+                const result = await db_client.db('denemeDB').collection('denemeCol').findOne({ discordID: solverId });
 
                 //eğer üyenin bulmaca puanı kaydı yoksa yeni kayıt oluşturuluyor ve az önce çözdüğü bulmaca için 1 puan ekleniyor.
                 if(result == null){
@@ -90,21 +90,28 @@ class PuzzleSystem
                       puzzlePoints: p_points 
                   }
 
-                  await db_client.db('denemeDB').collection('denemeCol2').insertOne(doc);
+                  await db_client.db('denemeDB').collection('denemeCol').insertOne(doc);
 
                 }else{
 
-                  //üyenin bulmaca puanı kaydı varsa eski puanın bir fazlası yeni puan olarak değiştiriliyor.
-                  p_points = parseInt(result.puzzlePoints) + 1;
-                  const updateDoc = 
-                  {
-                      $set: 
-                      {
-                          puzzlePoints: p_points
-                      },
-                  };
+                    if (result.puzzlePoints == null) {
+                        //üyenin kaydı var ancak bulmaca puanının yoksa bulmaca puanı kayda ekleniyor.
+                        p_points = 1;
+                        await db_client.db('denemeDB').collection('denemeCol')
+                        .updateOne({ discordID: solverId }, {$set: {puzzlePoints: p_points}});
+                    } else {
+                        //üyenin bulmaca puanı kaydı varsa eski puanın bir fazlası yeni puan olarak değiştiriliyor.
+                        p_points = parseInt(result.puzzlePoints) + 1;
+                        const updateDoc = 
+                        {
+                            $set: 
+                            {
+                                puzzlePoints: p_points
+                            },
+                        };
 
-                  await db_client.db('denemeDB').collection('denemeCol2').updateOne({ discordID: solverId }, updateDoc);
+                        await db_client.db('denemeDB').collection('denemeCol').updateOne({ discordID: solverId }, updateDoc);
+                    }
                 }
 
               } finally {

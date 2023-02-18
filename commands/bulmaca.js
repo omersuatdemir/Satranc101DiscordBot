@@ -8,12 +8,12 @@ module.exports = {
         .setDescription('Mevcut bulmacayi çözün')
         .addStringOption(option =>
             option.setName("hamle")
-                .setDescription("Hamlelerinizi SAN formatinda yazin.")
+                .setDescription("Hamlelerinizi (ingilizce) SAN formatinda yazin.")
                 .setRequired(true)),
     async execute(interaction)
     {
 
-        let activePuzzle = PuzzleSystem.instance.activePuzzle
+        let activePuzzle = PuzzleSystem.instance?.activePuzzle
 
         if (activePuzzle === undefined)
         {

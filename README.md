@@ -27,12 +27,17 @@ config.json adlı bir dosya oluşturun. Herkese paylaşmak istemediğimiz token'
 Oluşturduğunuz dosyanın içine aşağıdaki metni yapıştırın. Daha sonra benden alacağınız token'ları gerekli yerlere yerleştirirsiniz.
    ```json
  {
-    	"discord_token": "YOUR_DISCORD_TOKEN",
-    	"lichess_token": "YOUR_LICHESS_TOKEN",
-    	"clientId": "CLIENT_ID",
-    	"guildId": "GUILD_ID",
-		"puzzleChannelId": "PUZZLE_CHANNEL_ID"
-    }
+	"discord_token": "DISCORD_TOKEN",
+	"lichess_token": "LICHESS_TOKEN",
+	"clientId": "CLIENT_ID",
+	"guildId": "GUILD_ID",
+    "puzzleChannelId": "PUZZLE_CHANNEL_ID",
+	"tournamentPermRoleID": "PERMISSION_ROLE_ID",
+	"announcementChannelID": "ANNOUNCEMENT_CHANNEL_ID",
+	"lichessTeamID": "LICHESS_TEAM_ID",
+	"plus2kRoleID": "GIVEN_ROLE_ID",
+	"dbConnectionString": "MONGODB_CONNECTION_STRING"
+}
 ```
 
 Dosyamız artık üzerinde çalışılmaya hazır. GitHub bağlantılarını yaptıktan sonra dosyamızın son şekli aşağıdaki gibi olacaktır.

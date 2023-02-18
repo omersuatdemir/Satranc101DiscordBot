@@ -8,6 +8,14 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('teyit')
 		.setDescription('Lichess hesabinizi teyit edin.')
+		.addStringOption(option =>
+		option.setName('platform')
+		  .setDescription('Hesabinizi eşleştirmek istediğiniz platformu seçin.')
+		  .setRequired(true)
+		  .addChoices(
+			{ name: 'Lichess.org', value: 'lichess_org' },
+			{ name: 'Chess.com', value: 'chess_com' }
+			))
 		.addStringOption((option) =>
 		option
 		  .setName('id')
@@ -36,9 +44,9 @@ module.exports = {
 			.setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png');
 
 			//biyografiyi bir değişkene atıyoruz.
-			const lcBio = response.data.profile.bio;
+			const lcBio = response.data.profile?.bio;
 			//teyit metni ile biyografiyi kıyaslıyoruz.
-			if(userName == lcBio)
+			if(userName == lcBio.substring(0, userName.length ))
 			{
 
 				//teyit gerçekleşirse veri tabanı işlemleri başlıyor.
@@ -59,7 +67,6 @@ module.exports = {
 								lichessID: response.data.id 
 							}
 							const result2 = await client.db('denemeDB').collection('denemeCol').insertOne(doc);
-							console.log(result2);
 							if(result2.acknowledged)
 							{
 
@@ -84,36 +91,70 @@ module.exports = {
 						}
 					}
 					else{
-						//üyenin daha önceden kaydı varsa lichess id sini yeni girilen id ile değiştiriyoruz.
-						try {
-							const updateDoc = 
-							{
-								$set: 
+
+						//eğer hesap var ancak lichessID yoksa bu sefer sadece onu ekliyoruz
+						if (result.lichessID == null) { 
+
+							try {
+								const result2 = await client.db('denemeDB').collection('denemeCol')
+								.updateOne({discordID: interaction.user.id} , {$set: {lichessID: response.data.id}});
+								if(result2.acknowledged)
 								{
-								  lichessID: interaction.options.getString('id')
-								},
-							  };
-							const result3 = await client.db('denemeDB').collection('denemeCol')
-							.updateOne({ discordID: interaction.user.id }, updateDoc);
-							console.log(`${result3.matchedCount} document(s) matched the filter, updated ${result3.modifiedCount} document(s)`);
-							if(result3.acknowledged){
-
-								const updatedEmbed = new EmbedBuilder()
-								.setColor(0x2cee1a)
-								.setTitle('Hesabınız Güncellendi!')
-								.setURL('https://lichess.org/@/'+ response.data.id)
-								.setDescription('Hesabınız başarıyla güncellendi.\n'
-								+ result.lichessID + ' -> ' + response.data.id)
-								.setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png');
-
-								interaction.reply({ embeds: [updatedEmbed] });
+	
+									const verifiedEmbed = new EmbedBuilder()
+									.setColor(0x2cee1a)
+									.setTitle('Hesabınız Doğrulandı!')
+									.setURL('https://lichess.org/@/'+ response.data.id)
+									.setDescription('Hesabınız başarıyla doğrulandı.\n'
+									+ 'https://lichess.org/@/'+ response.data.id)
+									.setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png');
+	
+									interaction.reply({ embeds: [verifiedEmbed] });
+								}
+								else
+								{
+									interaction.reply({ embeds: [dbErrorEmbed] });
+								}
 							}
-							else{
-								interaction.reply({ embeds: [dbErrorEmbed] });
+							finally 
+							{
+								await client.close();
 							}
-						  } finally {
-							await client.close();
+						} 
+						else 
+						{
+							//üyenin daha önceden kaydı varsa lichess id sini yeni girilen id ile değiştiriyoruz.
+							try {
+								const updateDoc = 
+								{
+									$set: 
+									{
+									lichessID: interaction.options.getString('id')
+									},
+								};
+								const result3 = await client.db('denemeDB').collection('denemeCol')
+								.updateOne({ discordID: interaction.user.id }, updateDoc);
+								console.log(`${result3.matchedCount} document(s) matched the filter, updated ${result3.modifiedCount} document(s)`);
+								if(result3.acknowledged){
+
+									const updatedEmbed = new EmbedBuilder()
+									.setColor(0x2cee1a)
+									.setTitle('Hesabınız Güncellendi!')
+									.setURL('https://lichess.org/@/'+ response.data.id)
+									.setDescription('Hesabınız başarıyla güncellendi.\n'
+									+ result.lichessID + ' -> ' + response.data.id)
+									.setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png');
+
+									interaction.reply({ embeds: [updatedEmbed] });
+								}
+								else{
+									interaction.reply({ embeds: [dbErrorEmbed] });
+								}
+							} finally {
+								await client.close();
+							}
 						}
+
 					}
 				  } finally {
 					await client.close();
