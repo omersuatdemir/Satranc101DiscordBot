@@ -1,6 +1,4 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-// Bu kod elon musk tarafından yazılmıştır
-
 
 module.exports = {
 	data: new SlashCommandBuilder()
