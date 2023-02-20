@@ -1,5 +1,5 @@
 const { ChessboardBuilder } = require("../../utility/chessboardBuilder");
-const { EmbedBuilder } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, Events, EmbedBuilder } = require('discord.js');
 const { PuzzleDatabase } = require("./puzzleDatabase");
 const { dbConnectionString } = require("../../config.json");
 
@@ -133,7 +133,15 @@ class PuzzleSystem
                 + `\nÇözüm: ||${this.activePuzzle.getMovesSan().join(", ")}||\nBulmaca Linki: ${this.activePuzzle.getLichessPuzzleLink()}`)
                 .setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png');
 
-            channel.send({embeds: [solvedEmbed] });
+            const row = new ActionRowBuilder()
+			.addComponents(
+				new ButtonBuilder()
+					.setCustomId('button1')
+					.setLabel('Skor Tablosunu Göster')
+					.setStyle(ButtonStyle.Secondary),
+			);
+
+            channel.send({embeds: [solvedEmbed], components: [row] });
         }
     }
 
