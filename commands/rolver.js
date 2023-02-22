@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { plus2kRoleID, dbConnectionString } = require("../config.json");
+const { plus2kRoleID, dbConnectionString, mongoDB, mongoCol } = require("../config.json");
 const axios = require("axios");
 const MongoClient = require("mongodb").MongoClient;
 
@@ -13,10 +13,10 @@ module.exports = {
 		const client = new MongoClient(dbConnectionString);
 
 		try {
-			const result = await client.db('denemeDB').collection('denemeCol').findOne({ discordID: interaction.user.id });
+			const result = await client.db(mongoDB).collection(mongoCol).findOne({ discordID: interaction.user.id });
 
 			//kayıt bulunursa istenilen rol için yeterlilikler kontrol ediliyor.
-			if(result.lichessID == null && result.chesscomID == null){
+			if(result?.lichessID == null && result?.chesscomID == null){
 				interaction.reply('Teyitli hesabınız bulunamadı.\n\`/teyit\` kullanmayı deneyin');
 			}
 			else{

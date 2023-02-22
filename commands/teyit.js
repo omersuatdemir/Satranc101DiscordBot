@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { dbConnectionString } = require("../config.json");
+const { dbConnectionString, mongoDB, mongoCol } = require("../config.json");
 const axios = require("axios");
 const MongoClient = require("mongodb").MongoClient;
 
@@ -58,7 +58,7 @@ module.exports = {
 						{
 						try 
 						{
-							const result = await client.db('denemeDB').collection('denemeCol').findOne({ discordID: interaction.user.id });
+							const result = await client.db(mongoDB).collection(mongoCol).findOne({ discordID: interaction.user.id });
 							//üyenin daha önce kaydı yoksa yeni kayıt oluşturuyoruz.
 							if (result == null) 
 							{
@@ -69,7 +69,7 @@ module.exports = {
 										discordID: interaction.user.id,
 										lichessID: response.data.id 
 									}
-									const result2 = await client.db('denemeDB').collection('denemeCol').insertOne(doc);
+									const result2 = await client.db(mongoDB).collection(mongoCol).insertOne(doc);
 									if(result2.acknowledged)
 									{
 
@@ -99,7 +99,7 @@ module.exports = {
 								if (result.lichessID == null) { 
 
 									try {
-										const result2 = await client.db('denemeDB').collection('denemeCol')
+										const result2 = await client.db(mongoDB).collection(mongoCol)
 										.updateOne({discordID: interaction.user.id} , {$set: {lichessID: response.data.id}});
 										if(result2.acknowledged)
 										{
@@ -135,7 +135,7 @@ module.exports = {
 											lichessID: interaction.options.getString('id')
 											},
 										};
-										const result3 = await client.db('denemeDB').collection('denemeCol')
+										const result3 = await client.db(mongoDB).collection(mongoCol)
 										.updateOne({ discordID: interaction.user.id }, updateDoc);
 										console.log(`${result3.matchedCount} document(s) matched the filter, updated ${result3.modifiedCount} document(s)`);
 										if(result3.acknowledged){
@@ -203,7 +203,7 @@ module.exports = {
 						{
 						try 
 						{
-							const result = await client.db('denemeDB').collection('denemeCol').findOne({ discordID: interaction.user.id });
+							const result = await client.db(mongoDB).collection(mongoCol).findOne({ discordID: interaction.user.id });
 							//üyenin daha önce kaydı yoksa yeni kayıt oluşturuyoruz.
 							if (result == null) 
 							{
@@ -214,7 +214,7 @@ module.exports = {
 										discordID: interaction.user.id,
 										chesscomID: response.data.username 
 									}
-									const result2 = await client.db('denemeDB').collection('denemeCol').insertOne(doc);
+									const result2 = await client.db(mongoDB).collection(mongoCol).insertOne(doc);
 									if(result2.acknowledged)
 									{
 
@@ -244,7 +244,7 @@ module.exports = {
 								if (result.chesscomID == null) { 
 
 									try {
-										const result2 = await client.db('denemeDB').collection('denemeCol')
+										const result2 = await client.db(mongoDB).collection(mongoCol)
 										.updateOne({discordID: interaction.user.id} , {$set: {chesscomID: response.data.username}});
 										if(result2.acknowledged)
 										{
@@ -280,7 +280,7 @@ module.exports = {
 											chesscomID: interaction.options.getString('id')
 											},
 										};
-										const result3 = await client.db('denemeDB').collection('denemeCol')
+										const result3 = await client.db(mongoDB).collection(mongoCol)
 										.updateOne({ discordID: interaction.user.id }, updateDoc);
 										console.log(`${result3.matchedCount} document(s) matched the filter, updated ${result3.modifiedCount} document(s)`);
 										if(result3.acknowledged){

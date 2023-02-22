@@ -2,7 +2,7 @@ module.exports = { getresults };
 
 const { default: axios } = require('axios');
 const { Client, GatewayIntentBits, AttachmentBuilder, EmbedBuilder } = require('discord.js');
-const { discord_token , announcementChannelID, dbConnectionString} = require('../config.json');
+const { discord_token , announcementChannelID, dbConnectionString, mongoDB, mongoCol} = require('../config.json');
 const MongoClient = require("mongodb").MongoClient;
 
 
@@ -26,7 +26,7 @@ function getresults(t_id){
       checkFirst = false;
       try {
         const client = new MongoClient(dbConnectionString);
-        var result1 = await client.db('denemeDB').collection('denemeCol').findOne({ lichessID: jsondata[0].username.toLowerCase() });
+        var result1 = await client.db(mongoDB).collection(mongoCol).findOne({ lichessID: jsondata[0].username.toLowerCase() });
         if(result1 != null){
           checkFirst = true;
           console.log(result1.discordID);
@@ -41,7 +41,7 @@ function getresults(t_id){
       checkSecond = false;
       try {
         const client = new MongoClient(dbConnectionString);
-        var result2 = await client.db('denemeDB').collection('denemeCol').findOne({ lichessID: jsondata[1].username.toLowerCase() });
+        var result2 = await client.db(mongoDB).collection(mongoCol).findOne({ lichessID: jsondata[1].username.toLowerCase() });
         if(result2 != null){
           checkSecond = true;
           console.log(result2.discordID);
@@ -56,7 +56,7 @@ function getresults(t_id){
       checkThird = false;
       try {
         const client = new MongoClient(dbConnectionString);
-        var result3 = await client.db('denemeDB').collection('denemeCol').findOne({ lichessID: jsondata[2].username.toLowerCase() });
+        var result3 = await client.db(mongoDB).collection(mongoCol).findOne({ lichessID: jsondata[2].username.toLowerCase() });
         if(result3 != null){
           checkThird = true;
           console.log(result3.discordID);
