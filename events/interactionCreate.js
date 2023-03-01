@@ -23,8 +23,6 @@ module.exports = {
 		}
 		if (interaction.isButton()){
 
-			interaction.update({ components: [row] });
-
 			const row = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
@@ -33,6 +31,8 @@ module.exports = {
 					.setStyle(ButtonStyle.Secondary)
 					.setDisabled(true),
 			);
+
+			interaction.update({ components: [row] });
 
 			client.login(discord_token);
 

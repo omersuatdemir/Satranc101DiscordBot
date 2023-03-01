@@ -90,7 +90,8 @@ module.exports = {
       {
 
         var myDate = interaction.options.getString("startdate");
-        var datum = Date.parse(myDate);
+        //Sunucunun yerel saati utc olduğu için türkiye saatine göre girilebilmesi adına 3 saat çıkarıyoruz.
+        var datum = (Date.parse(myDate) - (1000*60*60*3));
         params.append("startDate", datum);
       }
 
@@ -133,7 +134,7 @@ module.exports = {
           date2.setMinutes(date2.getMinutes() + response.data.minutes + 1);
 
           console.log(`min: ${response.data.minutes}`);
-          console.log(`tournament date: ${date2}`)
+          console.log(`result announcement date: ${date2}`)
           const job2 = schedule.scheduleJob(date2, function ()
           {
             res123.getresults(response.data.id);

@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { oneYearRoleID } = require('../config.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -13,12 +14,24 @@ module.exports = {
         const str = parseInt(gun) + ' gündür sunucudasın';
 
         if (gun >= 365) {
-        const successful = new EmbedBuilder()
-        .setColor(0x117dd6)
-        .setTitle('Rol Eklendi')
-        .setDescription(str + '!')
-        .setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png');
-        interaction.reply({ embeds: [successful] });
+            if(interaction.member.roles.cache.has(oneYearRoleID)){
+                const alreadyTaken = new EmbedBuilder()
+                .setColor(0xec0505)
+                .setTitle('Bu Role Zaten Sahipsiniz')
+                .setDescription(str + '!')
+                .setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png');
+                interaction.reply({ embeds: [alreadyTaken] });
+            }
+            else{
+                const successful = new EmbedBuilder()
+                .setColor(0x117dd6)
+                .setTitle('Rol Eklendi')
+                .setDescription(str + '!')
+                .setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png');
+                interaction.member.roles.add(oneYearRoleID);
+                interaction.reply({ embeds: [successful] });
+            }
+        
             
         } else {
         const unsuccessful = new EmbedBuilder()

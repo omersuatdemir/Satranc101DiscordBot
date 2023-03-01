@@ -29,7 +29,6 @@ function getresults(t_id){
         var result1 = await client.db(mongoDB).collection(mongoCol).findOne({ lichessID: jsondata[0].username.toLowerCase() });
         if(result1 != null){
           checkFirst = true;
-          console.log(result1.discordID);
         }
         else{
           checkFirst = false;
@@ -44,7 +43,6 @@ function getresults(t_id){
         var result2 = await client.db(mongoDB).collection(mongoCol).findOne({ lichessID: jsondata[1].username.toLowerCase() });
         if(result2 != null){
           checkSecond = true;
-          console.log(result2.discordID);
         }
         else{
           checkSecond = false;
@@ -59,7 +57,6 @@ function getresults(t_id){
         var result3 = await client.db(mongoDB).collection(mongoCol).findOne({ lichessID: jsondata[2].username.toLowerCase() });
         if(result3 != null){
           checkThird = true;
-          console.log(result3.discordID);
         }
         else{
           checkThird = false;
