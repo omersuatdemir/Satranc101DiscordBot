@@ -174,8 +174,8 @@ module.exports = {
 				if(error.response.status == 404){
 					const invalidAccount = new EmbedBuilder()
 					.setColor(0xec0505)
-					.setTitle('Böyle Bir Hesap Bulunamadı.')
-					.setDescription(`\`${interaction.options.getString('id')}\` adında bir hesap bulunamadı.`)
+					.setTitle('Hesap Bulunamadı.')
+					.setDescription(`\`${interaction.options.getString('id')}\` adında bir lichess.org hesabı bulunamadı.`)
 					.setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png');
 
 					interaction.reply({ embeds: [invalidAccount] });
@@ -339,8 +339,8 @@ module.exports = {
 						if(error.response.status == 404){
 							const invalidAccount = new EmbedBuilder()
 							.setColor(0xec0505)
-							.setTitle('Böyle Bir Hesap Bulunamadı.')
-							.setDescription(`\`${interaction.options.getString('id')}\` adında bir hesap bulunamadı.`)
+							.setTitle('Hesap Bulunamadı.')
+							.setDescription(`\`${interaction.options.getString('id')}\` adında bir chess.com hesabı bulunamadı.`)
 							.setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png');
 		
 							interaction.reply({ embeds: [invalidAccount] });
