@@ -1,7 +1,7 @@
 module.exports = { getresults };
 
 const { default: axios } = require('axios');
-const { Client, GatewayIntentBits, AttachmentBuilder, EmbedBuilder } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const { discord_token , announcementChannelID, dbConnectionString, mongoDB, mongoCol} = require('../config.json');
 const MongoClient = require("mongodb").MongoClient;
 
@@ -20,8 +20,8 @@ function getresults(t_id){
 
     async function run() {
 
-      /*turnuvada ilk üçe giren lichess hesaplarının id'lerini kendi veritabanımızda aratarak herhangi bir discord hesabına bağlı olup
-      olmadıklarını inceliyoruz. bu kontroller sonucunda da duyuru yapılırken lichess veya discord hesabı olarak duyurulmalarına
+      /*turnuvada ilk üçe giren lichess hesaplarının id'lerini kendi veri tabanımızda aratarak herhangi bir discord hesabına bağlı olup
+      olmadıklarını inceliyoruz. Bu kontroller sonucunda da duyuru yapılırken lichess veya discord hesabı olarak duyurulmalarına
       karar veriyoruz.*/
       checkFirst = false;
       try {
@@ -29,6 +29,14 @@ function getresults(t_id){
         var result1 = await client.db(mongoDB).collection(mongoCol).findOne({ lichessID: jsondata[0].username.toLowerCase() });
         if(result1 != null){
           checkFirst = true;
+          if(result1?.tournamentPoints == null) {
+            const addon = await client.db(mongoDB).collection(mongoCol)
+            .updateOne({ lichessID: jsondata[0].username.toLowerCase() } , {$set: {tournamentPoints: 3}});
+          }
+          else{
+            const addon = await client.db(mongoDB).collection(mongoCol)
+            .updateOne({ lichessID: jsondata[0].username.toLowerCase() } , {$set: {tournamentPoints: result1.tournamentPoints + 3}});
+          }
         }
         else{
           checkFirst = false;
@@ -43,6 +51,14 @@ function getresults(t_id){
         var result2 = await client.db(mongoDB).collection(mongoCol).findOne({ lichessID: jsondata[1].username.toLowerCase() });
         if(result2 != null){
           checkSecond = true;
+          if(result2?.tournamentPoints === null) {
+            const addon = await client.db(mongoDB).collection(mongoCol)
+            .updateOne({ lichessID: jsondata[1].username.toLowerCase() } , {$set: {tournamentPoints: 2}});
+          }
+          else{
+            const addon = await client.db(mongoDB).collection(mongoCol)
+            .updateOne({ lichessID: jsondata[1].username.toLowerCase() } , {$set: {tournamentPoints: result2.tournamentPoints + 2}});
+          }
         }
         else{
           checkSecond = false;
@@ -57,6 +73,14 @@ function getresults(t_id){
         var result3 = await client.db(mongoDB).collection(mongoCol).findOne({ lichessID: jsondata[2].username.toLowerCase() });
         if(result3 != null){
           checkThird = true;
+          if(result3?.tournamentPoints == null) {
+            const addon = await client.db(mongoDB).collection(mongoCol)
+            .updateOne({ lichessID: jsondata[2].username.toLowerCase() } , {$set: {tournamentPoints: 1}});
+          }
+          else{
+            const addon = await client.db(mongoDB).collection(mongoCol)
+            .updateOne({ lichessID: jsondata[2].username.toLowerCase() } , {$set: {tournamentPoints: result3.tournamentPoints + 1}});
+          }
         }
         else{
           checkThird = false;
@@ -65,6 +89,7 @@ function getresults(t_id){
       } 
       finally {}
 
+      //sonuçların olduğu mesaj oluşturuluyor
       client.login(discord_token);
 
       client.on("ready", ()=>{
