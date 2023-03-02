@@ -1,6 +1,7 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, Events, EmbedBuilder, Client, GatewayIntentBits } = require('discord.js');
-const { discord_token } = require('../config.json');
+const { Events, Client, GatewayIntentBits } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+
+const puzzleLeaderboard = require('../functions/puzzle-leaderboard');
 
 module.exports = {
 	name: Events.InteractionCreate,
@@ -23,23 +24,7 @@ module.exports = {
 		}
 		if (interaction.isButton()){
 
-			const row = new ActionRowBuilder()
-			.addComponents(
-				new ButtonBuilder()
-					.setCustomId('button1_disabled')
-					.setLabel('Skor Tablosunu Göster')
-					.setStyle(ButtonStyle.Secondary)
-					.setDisabled(true),
-			);
-
-			interaction.update({ components: [row] });
-
-			client.login(discord_token);
-
-			client.on("ready", ()=>{
-				client.channels.cache.get(interaction.channelId)
-				.send('\`\`\`----Skor Tablosu-----\n1-isim1\n2-isim2\n3-isim3\`\`\`');
-			})
+			puzzleLeaderboard.leaderboard(interaction);
 		}
 
 		return;

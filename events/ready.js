@@ -9,6 +9,6 @@ module.exports = {
 	execute(client) {
 		console.log(`Ready! Logged in as ${client.user.tag}`);
 		var x = PuzzleSystem.start(client, puzzleChannelId);
-		x.schedule();
+		x.startRandomPuzzle();
 	},
 };
