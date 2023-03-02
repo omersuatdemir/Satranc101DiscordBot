@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { PuzzleSystem } = require("../systems/puzzleSystem/puzzleSystem");
 const { ChessboardBuilder } = require('../utility/chessboardBuilder');
+const {enToTr, trToEn} = require('../functions/san-translation');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -8,7 +9,7 @@ module.exports = {
         .setDescription('Mevcut bulmacayi çözün')
         .addStringOption(option =>
             option.setName("hamle")
-                .setDescription("Hamlelerinizi (ingilizce) SAN formatinda yazin.")
+                .setDescription("Hamlelerinizi SAN formatinda yazin.")
                 .setRequired(true)),
     async execute(interaction)
     {
@@ -20,7 +21,7 @@ module.exports = {
             await interaction.reply({content: "Şuan aktif bir bulmaca bulunmuyor", ephemeral: true})
         } else
         {
-            let move = interaction.options.getString("hamle")
+            let move = trToEn(interaction.options.getString("hamle"))
 
             var result = activePuzzle.checkSolution(interaction.user.id, move)
 
@@ -37,7 +38,7 @@ module.exports = {
                             .setPov(activePuzzle.playerSide)
                             .generateBuffer()
 
-                        await interaction.reply({ files: [buffer], content: `Doğru hamle! Rakibin ${result.opponentMove.san} oynadı!`, ephemeral: true })
+                        await interaction.reply({ files: [buffer], content: `Doğru hamle! Rakibin ${enToTr(result.opponentMove.san)} oynadı!`, ephemeral: true })
                     }
                     return
                 case "completed":
@@ -56,10 +57,10 @@ module.exports = {
                         return
                     }
                 case "invalid":
-                    await interaction.reply({content:`Geçersiz hamle ${result.move}`, ephemeral: true})
+                    await interaction.reply({content:`Geçersiz hamle ${enToTr(result.move)}`, ephemeral: true})
                     return
                 case "incorrect":
-                    await interaction.reply({content: `Yanlış hamle ${result.move}`,ephemeral:true})
+                    await interaction.reply({content: `Yanlış hamle ${enToTr(result.move)}`,ephemeral:true})
                     return
             }
         }

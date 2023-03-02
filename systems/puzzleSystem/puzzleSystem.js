@@ -5,6 +5,7 @@ const { dbConnectionString, mongoDB, mongoCol } = require("../../config.json");
 
 const schedule = require("node-schedule");
 const scheduleConfig = require("./puzzleScheduleConfig");
+const { enToTr } = require("../../functions/san-translation");
 const MongoClient = require("mongodb").MongoClient;
 
 class PuzzleSystem
@@ -130,7 +131,7 @@ class PuzzleSystem
                 .setTitle('Bulmaca Çözüldü!')
                 .setURL(this.activePuzzle.getLichessPuzzleLink())
                 .setDescription(`<@${solverId}> bulmacayı çözdü!\nToplam bulmaca puanınız: \`${p_points}\``
-                + `\nÇözüm: ||${this.activePuzzle.getMovesSan().join(", ")}||\nBulmaca Linki: ${this.activePuzzle.getLichessPuzzleLink()}`)
+                + `\nÇözüm: ||${enToTr(this.activePuzzle.getMovesSan().join(", "))}||\nBulmaca Linki: ${this.activePuzzle.getLichessPuzzleLink()}`)
                 .setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png');
 
             const row = new ActionRowBuilder()
