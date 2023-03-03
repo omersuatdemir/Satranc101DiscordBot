@@ -1,9 +1,7 @@
 const { Chess } = require("chess.js");
 
-class Puzzle
-{
-    constructor(fen, moves, puzzleId, rating = 0)
-    {
+class Puzzle {
+    constructor(fen, moves, puzzleId, rating = 0) {
         this.solved = false;
         this.puzzleId = puzzleId;
         this.fen = fen;
@@ -17,20 +15,17 @@ class Puzzle
 
     }
 
-    getInitialFen()
-    {
+    getInitialFen() {
         var board = new Chess(this.fen);
         board.move(this.moves[0]);
         return board.fen();
     }
 
-    getMovesSan()
-    {
+    getMovesSan() {
         var moves = [];
         var board = new Chess(this.fen);
 
-        for (var i = 0; i < this.moves.length; i++)
-        {
+        for (var i = 0; i < this.moves.length; i++) {
             let move = board.move(this.moves[i]);
             moves.push(move.san);
         }
@@ -39,13 +34,11 @@ class Puzzle
         return moves;
     }
 
-    getLichessPuzzleLink()
-    {
+    getLichessPuzzleLink() {
         return `https://lichess.org/training/${this.puzzleId}`;
     }
 
-    checkSolution(playerId, playerMoveSan)
-    {
+    checkSolution(playerId, playerMoveSan) {
         let board = new Chess(this.fen);
 
         let playerAlreadyHasProgress = Object.keys(this.playerProgress).includes(playerId);
@@ -53,26 +46,22 @@ class Puzzle
         let playedMoves = 0;
         let playerMoves = 0;
 
-        if (playerAlreadyHasProgress)
-        {
+        if (playerAlreadyHasProgress) {
             let playerProgress = this.playerProgress[playerId];
             playerMoves = playerProgress;
             playedMoves = playerProgress * 2 + 1;
 
-            if (playerMoves * 2 == this.moves.length)
-            {
+            if (playerMoves * 2 == this.moves.length) {
                 return { status: "alreadySolved" };
             }
 
-            for (var i = 0; i < playerProgress * 2 + 1; i++)
-            {
+            for (var i = 0; i < playerProgress * 2 + 1; i++) {
                 board.move(this.moves[i]);
             }
 
 
         }
-        else
-        {
+        else {
             board.move(this.moves[playedMoves]);
             playedMoves++;
         }
@@ -84,39 +73,32 @@ class Puzzle
 
         var playerMove;
 
-        try
-        {
+        try {
             playerMove = board.move(playerMoveSan);
             playedMoves++;
             playerMoves++;
-        } catch (e)
-        {
+        } catch (e) {
             return { status: "invalid", move: playerMoveSan };
         }
-        if (playerMove.from !== expectedFrom || playerMove.to !== expectedTo)
-        {
+        if (playerMove.from !== expectedFrom || playerMove.to !== expectedTo) {
             return { status: "incorrect", move: playerMoveSan };
         }
 
 
-        if (playedMoves == this.moves.length)
-        {
+        if (playedMoves == this.moves.length) {
             this.playerProgress[playerId] = playerMoves;
             return { status: "completed", fen: board.fen(), move: { "from": playerMove.from, "to": playerMove.to } };
         }
-        else
-        {
+        else {
             let nextMove = board.move(this.moves[playedMoves]);
             this.playerProgress[playerId] = playerMoves;
             return { status: "progress", opponentMove: { "san": nextMove.san, "from": nextMove.from, "to": nextMove.to }, fen: board.fen() };
         }
     }
 
-    getSolutionFen()
-    {
+    getSolutionFen() {
         let board = new Chess(this.fen);
-        for (let i = 0; i < this.moves.length; i++)
-        {
+        for (let i = 0; i < this.moves.length; i++) {
             var move = this.moves[i];
             board.move(move);
         }

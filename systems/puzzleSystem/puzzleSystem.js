@@ -8,11 +8,9 @@ const scheduleConfig = require("./puzzleScheduleConfig");
 const { enToTr } = require("../../functions/san-translation");
 const MongoClient = require("mongodb").MongoClient;
 
-class PuzzleSystem
-{
+class PuzzleSystem {
 
-    static start(client, channelId)
-    {
+    static start(client, channelId) {
         console.log("Starting Puzzle System")
 
         let v = new PuzzleSystem()
@@ -28,11 +26,9 @@ class PuzzleSystem
         return v
     }
 
-    schedule()
-    {
+    schedule() {
 
-        this.scheduleJob = schedule.scheduleJob({ rule: scheduleConfig.getRule() }, () =>
-        {
+        this.scheduleJob = schedule.scheduleJob({ rule: scheduleConfig.getRule() }, () => {
             this.startRandomPuzzle()
 
             // reschedule for tomorrow
@@ -50,8 +46,7 @@ class PuzzleSystem
         console.log(`Started puzzle schedule. Next occurance: ${this.scheduleJob.nextInvocation()}`)
     }
 
-    async startRandomPuzzle()
-    {
+    async startRandomPuzzle() {
 
         this.activePuzzle = await this._database.loadRandomPuzzle();
         let channel = this.client.channels.cache.get(this.channelId)
@@ -70,10 +65,8 @@ class PuzzleSystem
 
     //bir üye bulmacayı çözdüğünde çalışan fonksiyon.
     //üyenin discord id'si parametre ile alınıyor.
-    async solvePuzzle(solverId)
-    {
-        if (!this.activePuzzle.solved)
-        {   
+    async solvePuzzle(solverId) {
+        if (!this.activePuzzle.solved) {
             //üyenin id'si üzerinden bulmaca puanlarının olduğu tablo sorgulanıyor.
             var p_points;
             const db_client = new MongoClient(dbConnectionString);
@@ -82,30 +75,30 @@ class PuzzleSystem
                 const result = await db_client.db(mongoDB).collection(mongoCol).findOne({ discordID: solverId });
 
                 //eğer üyenin bulmaca puanı kaydı yoksa yeni kayıt oluşturuluyor ve az önce çözdüğü bulmaca için 1 puan ekleniyor.
-                if(result == null){
+                if (result == null) {
 
-                  p_points = 1;
-                  const doc = 
-                  {
-                      discordID: solverId,
-                      puzzlePoints: p_points 
-                  }
+                    p_points = 1;
+                    const doc =
+                    {
+                        discordID: solverId,
+                        puzzlePoints: p_points
+                    }
 
-                  await db_client.db(mongoDB).collection(mongoCol).insertOne(doc);
+                    await db_client.db(mongoDB).collection(mongoCol).insertOne(doc);
 
-                }else{
+                } else {
 
                     if (result.puzzlePoints == null) {
                         //üyenin kaydı var ancak bulmaca puanının yoksa bulmaca puanı kayda ekleniyor.
                         p_points = 1;
                         await db_client.db(mongoDB).collection(mongoCol)
-                        .updateOne({ discordID: solverId }, {$set: {puzzlePoints: p_points}});
+                            .updateOne({ discordID: solverId }, { $set: { puzzlePoints: p_points } });
                     } else {
                         //üyenin bulmaca puanı kaydı varsa eski puanın bir fazlası yeni puan olarak değiştiriliyor.
                         p_points = parseInt(result.puzzlePoints) + 1;
-                        const updateDoc = 
+                        const updateDoc =
                         {
-                            $set: 
+                            $set:
                             {
                                 puzzlePoints: p_points
                             },
@@ -115,9 +108,9 @@ class PuzzleSystem
                     }
                 }
 
-              } finally {
+            } finally {
                 await db_client.close();
-              }
+            }
 
             let channel = this.client.channels.cache.get(this.channelId)
             let buffer = await ChessboardBuilder.create()
@@ -131,31 +124,28 @@ class PuzzleSystem
                 .setTitle('Bulmaca Çözüldü!')
                 .setURL(this.activePuzzle.getLichessPuzzleLink())
                 .setDescription(`<@${solverId}> bulmacayı çözdü!\nToplam bulmaca puanınız: \`${p_points}\``
-                + `\nÇözüm: ||${enToTr(this.activePuzzle.getMovesSan().join(", "))}||\nBulmaca Linki: ${this.activePuzzle.getLichessPuzzleLink()}`)
+                    + `\nÇözüm: ||${enToTr(this.activePuzzle.getMovesSan().join(", "))}||\nBulmaca Linki: ${this.activePuzzle.getLichessPuzzleLink()}`)
                 .setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png');
 
             const row = new ActionRowBuilder()
-			.addComponents(
-				new ButtonBuilder()
-					.setCustomId('button1')
-					.setLabel('Skor Tablosunu Göster')
-					.setStyle(ButtonStyle.Secondary),
-			);
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('button1')
+                        .setLabel('Skor Tablosunu Göster')
+                        .setStyle(ButtonStyle.Secondary),
+                );
 
-            channel.send({embeds: [solvedEmbed], components: [row] });
+            channel.send({ embeds: [solvedEmbed], components: [row] });
         }
     }
 
-    endPuzzle()
-    {
-        if (this.hasOngoingPuzzle())
-        {
+    endPuzzle() {
+        if (this.hasOngoingPuzzle()) {
             this.activePuzzle = undefined
         }
     }
 
-    hasOngoingPuzzle()
-    {
+    hasOngoingPuzzle() {
         return this.activePuzzle !== undefined
     }
 }

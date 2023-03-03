@@ -1,19 +1,19 @@
 module.exports = { pmall };
 
 const { default: axios } = require('axios');
-const { lichess_token, lichessTeamID} = require("../config.json");
+const { lichess_token, lichessTeamID } = require("../config.json");
 
-function pmall(message){
+function pmall(message) {
 
     const params = new URLSearchParams();
-    params.append('message',message);
+    params.append('message', message);
 
     //parametre olarak alınan metin, id'si verilen takıma duyuru olarak atılıyor.
-    axios.post('https://lichess.org/team/'+lichessTeamID+'/pm-all', params, {headers: { Authorization: "Bearer " + lichess_token }})
-    .then(function (response) {
-        console.log(response);
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
+    axios.post('https://lichess.org/team/' + lichessTeamID + '/pm-all', params, { headers: { Authorization: "Bearer " + lichess_token } })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 }

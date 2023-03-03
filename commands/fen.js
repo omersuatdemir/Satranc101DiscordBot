@@ -8,8 +8,7 @@ module.exports = {
         .addStringOption(option =>
             option.setName("fen")
                 .setDescription("FEN string to generate the board with")),
-    async execute(interaction)
-    {
+    async execute(interaction) {
         //kullanıcıya iletmek için, ChessboardBuilder sınıfını kullanarak bir görsel oluşturuyoruz.
         let buffer = await ChessboardBuilder.create()
             .setFen(interaction.options.getString("fen"))

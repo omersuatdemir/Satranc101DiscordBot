@@ -1,5 +1,5 @@
 const { Events } = require('discord.js');
-const {PuzzleSystem} = require('../systems/puzzleSystem/puzzleSystem');
+const { PuzzleSystem } = require('../systems/puzzleSystem/puzzleSystem');
 const { puzzleChannelId } = require('../config.json');
 
 

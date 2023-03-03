@@ -13,7 +13,7 @@ async function leaderboard(interaction) {
 
     try {
         const result = await db_client.db(mongoDB).collection(mongoCol)
-            .find({ "puzzlePoints": { $exists: true } }).toArray();
+            .find({ "puzzlePoints": { $exists: true } }).sort({ "puzzlePoints": -1 }).toArray();
         for (let i = 0; i < result.length; i++) {
             const element = result[i];
             if (element.discordID == interaction.user.id) {
@@ -25,10 +25,10 @@ async function leaderboard(interaction) {
                 //https://stackoverflow.com/questions/62543408/how-do-i-convert-an-id-to-a-username-discord-js-v12
                 for (let j = tensPlace * 10; j < (tensPlace + 1) * 10; j++) {
                     if (result[j] != null) {
-                        const user = client.users.fetch(result[j].discordID, { cache: true });
+                        const user = await client.users.fetch(result[j].discordID, { cache: true });
                         if (user != null) {
                             const userTag = `${user?.username}#${user?.discriminator}`;
-                            lbText = lbText + (j + ' - ' + userTag + ' - ' + result[j].puzzlePoints + '\n');
+                            lbText = lbText + (j + 1 + ' - ' + userTag + ' - ' + result[j].puzzlePoints + '\n');
                         }
                     }
                 }

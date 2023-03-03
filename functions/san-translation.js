@@ -1,23 +1,25 @@
-module.exports = {enToTr, trToEn}
+module.exports = { enToTr, trToEn }
 
-function enToTr(text){
+function enToTr(text) {
     var text;
-    const trSAN = ['K','F','A','Ş','V'];
-    const enSAN = ['R','B','N','K','Q'];
-    
+
+    var trSAN = ['F', 'A', 'Ş', 'V', 'K'];
+    var enSAN = ['B', 'N', 'K', 'Q', 'R'];
+
     for (let index = 0; index < trSAN.length; index++) {
-        text = text.replace(enSAN[index],trSAN[index]);   
+        text = text.replaceAll(enSAN[index], trSAN[index]);
     }
     return text;
 }
 
-function trToEn(text){
+function trToEn(text) {
     var text;
-    const trSAN = ['K','F','A','Ş','V'];
-    const enSAN = ['R','B','N','K','Q'];
-    
+
+    var trSAN = ['K', 'F', 'A', 'Ş', 'V'];
+    var enSAN = ['R', 'B', 'N', 'K', 'Q'];
+
     for (let index = 0; index < trSAN.length; index++) {
-        text = text.replace(trSAN[index],enSAN[index]);   
+        text = text.replaceAll(trSAN[index], enSAN[index]);
     }
     return text;
 }

@@ -64,12 +64,10 @@ module.exports = {
         )
     ),
 
-  execute(interaction)
-  {
+  execute(interaction) {
 
     //Kullanıcının yetkisi, gerekli rol ile kontrol ediliyor.
-    if (interaction.member.roles.cache.has(tournamentPermRoleID))
-    {
+    if (interaction.member.roles.cache.has(tournamentPermRoleID)) {
       var informationMessage;
 
       //API'a gönderilecek parametreler ekleniyor.
@@ -82,16 +80,14 @@ module.exports = {
       params.append("minutes", interaction.options.getString("minutes"));
 
       //startDate veya waitMinutes yöntemi seçiliyor.
-      if (interaction.options.getString("startdate") == null)
-      {
+      if (interaction.options.getString("startdate") == null) {
         params.append("waitMinutes", interaction.options.getString("waitminutes"));
 
-      } else
-      {
+      } else {
 
         var myDate = interaction.options.getString("startdate");
         //Sunucunun yerel saati utc olduğu için türkiye saatine göre girilebilmesi adına 3 saat çıkarıyoruz.
-        var datum = (Date.parse(myDate) - (1000*60*60*3));
+        var datum = (Date.parse(myDate) - (1000 * 60 * 60 * 3));
         params.append("startDate", datum);
       }
 
@@ -100,8 +96,7 @@ module.exports = {
 
       //API'a post isteği gönderiliyor ve yanıt ile bilgilendirme mesajı hazırlanıyor.
       axios.post("https://lichess.org/api/tournament", params, { headers: { Authorization: "Bearer " + lichess_token } })
-        .then(function (response)
-        {
+        .then(function (response) {
           informationMessage =
             "Turnuva Kuruldu!\nTurnuva Adı: " +
             response.data.fullName +
@@ -124,8 +119,7 @@ module.exports = {
           date1.setSeconds(date1.getSeconds() - (30 * 60));
           console.log(response.data.startsAt);
           console.log(`announcement date: ${date1}`)
-          const job1 = schedule.scheduleJob(date1, function ()
-          {
+          const job1 = schedule.scheduleJob(date1, function () {
             ann.announceTourney(response.data.id);
           });
 
@@ -135,22 +129,19 @@ module.exports = {
 
           console.log(`min: ${response.data.minutes}`);
           console.log(`result announcement date: ${date2}`)
-          const job2 = schedule.scheduleJob(date2, function ()
-          {
+          const job2 = schedule.scheduleJob(date2, function () {
             res123.getresults(response.data.id);
           });
 
-        }).catch(function (e)
-        {
+        }).catch(function (e) {
           console.log(`Could not create tournament. Error: ${e}, Details:`);
-          try{
+          try {
             console.log(e.response.data);
-          }catch(_){}
+          } catch (_) { }
           interaction.reply("Turnuva oluşturulamadı. Lütfen daha sonra tekrar deneyin");
 
         })
-    } else
-    {
+    } else {
       interaction.reply("Turnuva kurulamadı, gerekli yetkiye sahip değilsiniz");
     }
   },
