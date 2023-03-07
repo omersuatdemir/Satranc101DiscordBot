@@ -3,7 +3,7 @@ const { lichess_token, tournamentPermRoleID, lichessTeamID } = require("../confi
 const axios = require("axios");
 const schedule = require('node-schedule');
 const ann = require('../functions/announcement');
-const res123 = require('../functions/getresults');
+const GetResults = require('../functions/getresults');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -92,7 +92,9 @@ module.exports = {
       }
 
       params.append("rated", false); //Sunucu içi turnuvalar puansız olarak ayarlanıyor.
-      params.append("description", interaction.options.getString("description"));
+
+      const descStr = '[Discord](https://discord.gg/jkr529f4mE) [Instagram](https://www.instagram.com/satranc.101)\n';
+      params.append("description", descStr + interaction.options.getString("description"));
 
       //API'a post isteği gönderiliyor ve yanıt ile bilgilendirme mesajı hazırlanıyor.
       axios.post("https://lichess.org/api/tournament", params, { headers: { Authorization: "Bearer " + lichess_token } })
@@ -117,7 +119,6 @@ module.exports = {
           // date1 = duyuru tarihi
           const date1 = new Date(Date.parse(response.data.startsAt));
           date1.setSeconds(date1.getSeconds() - (30 * 60));
-          console.log(response.data.startsAt);
           console.log(`announcement date: ${date1}`)
           const job1 = schedule.scheduleJob(date1, function () {
             ann.announceTourney(response.data.id);
@@ -130,16 +131,16 @@ module.exports = {
           console.log(`min: ${response.data.minutes}`);
           console.log(`result announcement date: ${date2}`)
           const job2 = schedule.scheduleJob(date2, function () {
-            res123.getresults(response.data.id);
+            GetResults.getresults(response.data.id);
           });
 
         }).catch(function (e) {
           console.log(`Could not create tournament. Error: ${e}, Details:`);
           try {
             console.log(e.response.data);
-          } catch (_) { }
-          interaction.reply("Turnuva oluşturulamadı. Lütfen daha sonra tekrar deneyin");
-
+          } catch (error) {
+            interaction.reply("Turnuva oluşturulamadı. Lütfen daha sonra tekrar deneyin");
+          }
         })
     } else {
       interaction.reply("Turnuva kurulamadı, gerekli yetkiye sahip değilsiniz");

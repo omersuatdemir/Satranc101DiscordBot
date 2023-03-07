@@ -83,7 +83,7 @@ module.exports = {
 									}
 
 									//yeterlilikler sağlanıyorsa üyeye istenilen rolü veriyor.
-									if (lichess_prov) {
+									if (lichess_prov == true) {
 										interaction.member.roles.add(plus2kRoleID);
 										const verifiedEmbed = new EmbedBuilder()
 											.setColor(0x2cee1a)
@@ -102,31 +102,28 @@ module.exports = {
 								.then(function (response) {
 
 									if (response.data?.chess_blitz?.last?.rating >= 2000) {
-										if ((response.data?.chess_blitz?.last?.rating - response.data?.chess_blitz?.last?.rd >= 2000)
-											|| response.data?.chess_blitz?.last?.rd <= 50) {
+										if (((response.data?.chess_blitz?.last?.rating - response.data?.chess_blitz?.last?.rd) >= 2000) || (response.data?.chess_blitz?.last?.rd <= 50)) {
 											prov = true;
 										}
 										chesscom_performanceProv = true;
 									}
 
 									if (response.data?.chess_bullet?.last?.rating >= 2000) {
-										if ((response.data?.chess_bullet?.last?.rating - response.data?.chess_bullet?.last?.rd >= 2000)
-											|| response.data?.chess_bullet?.last?.rd <= 50) {
+										if (((response.data?.chess_bullet?.last?.rating - response.data?.chess_bullet?.last?.rd) >= 2000) || (response.data?.chess_bullet?.last?.rd <= 50)) {
 											prov = true;
 										}
 										chesscom_performanceProv = true;
 									}
 
 									if (response.data?.chess_rapid?.last?.rating >= 2000) {
-										if ((response.data?.chess_rapid?.last?.rating - response.data?.chess_rapid?.last?.rd >= 2000)
-											|| response.data?.chess_rapid?.last?.rd <= 50) {
+										if (((response.data?.chess_rapid?.last?.rating - response.data?.chess_rapid?.last?.rd) >= 2000) || (response.data?.chess_rapid?.last?.rd <= 50)) {
 											prov = true;
 										}
 										chesscom_performanceProv = true;
 									}
 
 									//yeterlilikler sağlanıyorsa üyeye istenilen rolü veriyor.
-									if (chesscom_prov) {
+									if (chesscom_prov == true) {
 										interaction.member.roles.add(plus2kRoleID);
 
 										const verifiedEmbed = new EmbedBuilder()
@@ -141,9 +138,10 @@ module.exports = {
 									}
 									else {
 
-										if (lichess_performanceProv || chesscom_performanceProv) {
-											if (lichess_performanceProv && !lichess_prov
-												&& chesscom_performanceProv && !chesscom_prov) {
+										if (lichess_performanceProv == true || chesscom_performanceProv == true) {
+
+											if (lichess_performanceProv == true && lichess_prov == false
+												&& chesscom_performanceProv == true && chesscom_prov == false) {
 												const invalidAccount = new EmbedBuilder()
 													.setColor(0xec0505)
 													.setTitle('Puan Sapma Değeriniz Yüksek')
@@ -153,8 +151,8 @@ module.exports = {
 												interaction.reply({ embeds: [invalidAccount] });
 											}
 
-											if (lichess_performanceProv && !lichess_prov
-												&& !chesscom_performanceProv && !chesscom_prov) {
+											if (lichess_performanceProv == true && lichess_prov == false
+												&& chesscom_performanceProv == false && chesscom_prov == false) {
 												const invalidAccount = new EmbedBuilder()
 													.setColor(0xec0505)
 													.setTitle('Lichess Puan Sapma Değeriniz Yüksek')
@@ -164,11 +162,11 @@ module.exports = {
 												interaction.reply({ embeds: [invalidAccount] });
 											}
 
-											if (!lichess_performanceProv && !lichess_prov
-												&& chesscom_performanceProv && !chesscom_prov) {
+											if (lichess_performanceProv == false && lichess_prov == false
+												&& chesscom_performanceProv == true && chesscom_prov == false) {
 												const invalidAccount = new EmbedBuilder()
 													.setColor(0xec0505)
-													.setTitle('Puan Sapma Değeriniz Yüksek')
+													.setTitle('Chess.com Puan Sapma Değeriniz Yüksek')
 													.setDescription('Chess.com platformunda 2000 puanı geçtiğiniz tempolar olmuş ancak puan sapma değeriniz çok yüksek. Bu tempolarda yeterince oynamamış veya tutarlı performans göstermemiş olabilirsiniz. Bu tempolarda daha fazla oynayarak bu sorunu çözebilirsiniz.')
 													.setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png');
 
@@ -264,7 +262,7 @@ module.exports = {
 								interaction.reply({ embeds: [noRecord] });
 							}
 							else {
-								if (parseInt(result?.tournamentPoints) >= 9) {
+								if (parseInt(result?.tournamentPoints) >= 24) {
 									const successful = new EmbedBuilder()
 										.setColor(0x117dd6)
 										.setTitle('Rol Eklendi')
@@ -277,7 +275,7 @@ module.exports = {
 									const noVerif = new EmbedBuilder()
 										.setColor(0xec0505)
 										.setTitle('Yetersiz Puan')
-										.setDescription('Şampiyon rolünü alabilmek için en az 9 puana ihtiyacınız var.\nSizin puanınız: ' + result.tournamentPoints)
+										.setDescription('Şampiyon rolünü alabilmek için en az 24 puana ihtiyacınız var.\nSizin puanınız: ' + result.tournamentPoints)
 										.setThumbnail('https://cdn.discordapp.com/attachments/1065015635299537028/1066379362414379100/Satranc101Logo_1.png');
 									interaction.reply({ embeds: [noVerif] });
 								}

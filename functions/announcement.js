@@ -3,7 +3,7 @@ const { pmall } = require("./pmall");
 
 const { default: axios } = require('axios');
 const { Client, GatewayIntentBits, AttachmentBuilder, EmbedBuilder, time } = require('discord.js');
-const { discord_token, announcementChannelID } = require('../config.json');
+const { discord_token, announcementChannelID,tournamentPermRoleID } = require('../config.json');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -50,7 +50,7 @@ function announceTourney(t_id) {
             })
         })
         .catch(function (error) {
-            console.log(error);
+            client.channels.cache.get(announcementChannelID).send(`<@${tournamentPermRoleID}> duyuru yapılamadı, manuel yapın.`);
         });
 }
 

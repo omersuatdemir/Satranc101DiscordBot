@@ -2,7 +2,7 @@ module.exports = { getresults };
 
 const { default: axios } = require('axios');
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
-const { discord_token, announcementChannelID, dbConnectionString, mongoDB, mongoCol } = require('../config.json');
+const { discord_token, announcementChannelID, dbConnectionString, mongoDB, mongoCol, tournamentPermRoleID } = require('../config.json');
 const MongoClient = require("mongodb").MongoClient;
 
 
@@ -119,6 +119,6 @@ function getresults(t_id) {
       run().catch(console.dir);
     })
     .catch(function (error) {
-      console.log(error);
+      client.channels.cache.get(announcementChannelID).send(`<@${tournamentPermRoleID}> sonuçlar atılamadı, manuel atın.`);
     });
 }
