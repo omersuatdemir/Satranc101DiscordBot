@@ -18,7 +18,7 @@ function getresults(t_id) {
       var json = "[" + response.data.replace(/\r?\n/g, ",").replace(/,\s*$/, "") + "]";
       var jsondata = JSON.parse(json);
 
-      async function run() {
+      (async function () {
 
         /*turnuvada ilk üçe giren lichess hesaplarının id'lerini kendi veri tabanımızda aratarak herhangi bir discord hesabına bağlı olup
         olmadıklarını inceliyoruz. Bu kontroller sonucunda da duyuru yapılırken lichess veya discord hesabı olarak duyurulmalarına
@@ -115,8 +115,7 @@ function getresults(t_id) {
           client.channels.cache.get(announcementChannelID).send({ embeds: [resultsEmbed] });
         })
 
-      }
-      run().catch(console.dir);
+      }) ();
     })
     .catch(function (error) {
       client.channels.cache.get(announcementChannelID).send(`<@${tournamentPermRoleID}> sonuçlar atılamadı, manuel atın.`);

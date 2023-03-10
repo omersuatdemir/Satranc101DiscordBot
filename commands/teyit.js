@@ -53,7 +53,7 @@ module.exports = {
 
 							//teyit gerçekleşirse veri tabanı işlemleri başlıyor.
 							const client = new MongoClient(dbConnectionString);
-							async function run() {
+							(async function () {
 								try {
 									const result = await client.db(mongoDB).collection(mongoCol).findOne({ discordID: interaction.user.id });
 									//üyenin daha önce kaydı yoksa yeni kayıt oluşturuyoruz.
@@ -151,8 +151,7 @@ module.exports = {
 								} finally {
 									await client.close();
 								}
-							}
-							run().catch(console.dir);
+							})();
 						}
 						else {
 							interaction.reply({ embeds: [unsuccessfulVerificationEmbed] });
@@ -206,7 +205,7 @@ module.exports = {
 
 							//teyit gerçekleşirse veri tabanı işlemleri başlıyor.
 							const client = new MongoClient(dbConnectionString);
-							async function run() {
+							(async function () {
 								try {
 									const result = await client.db(mongoDB).collection(mongoCol).findOne({ discordID: interaction.user.id });
 									//üyenin daha önce kaydı yoksa yeni kayıt oluşturuyoruz.
@@ -304,8 +303,7 @@ module.exports = {
 								} finally {
 									await client.close();
 								}
-							}
-							run().catch(console.dir);
+							})();
 						}
 						else {
 							interaction.reply({ embeds: [unsuccessfulVerificationEmbed] });
