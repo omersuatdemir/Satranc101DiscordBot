@@ -48,35 +48,35 @@ module.exports = {
 									var perfs = response.data?.perfs;
 
 									if (perfs?.ultrabullet?.rating >= 2000) {
-										if ((perfs?.ultrabullet?.rd <= 110) || ((perfs?.ultrabullet?.rating - perfs?.ultrabullet?.rd) >= 2000) ) {
+										if ((perfs?.ultrabullet?.rd <= 110) || ((perfs?.ultrabullet?.rating - perfs?.ultrabullet?.rd) >= 2000)) {
 											prov = true;
 										}
 										lichess_performanceProv = true;
 									}
 
 									if (perfs?.blitz?.rating >= 2000) {
-										if ((perfs?.blitz?.rd <= 110) || ((perfs?.blitz?.rating - perfs?.blitz?.rd) >= 2000) ) {
+										if ((perfs?.blitz?.rd <= 110) || ((perfs?.blitz?.rating - perfs?.blitz?.rd) >= 2000)) {
 											prov = true;
 										}
 										lichess_performanceProv = true;
 									}
 
 									if (perfs?.bullet?.rating >= 2000) {
-										if ((perfs?.bullet?.rd <= 110) || ((perfs?.bullet?.rating - perfs?.bullet?.rd) >= 2000) ) {
+										if ((perfs?.bullet?.rd <= 110) || ((perfs?.bullet?.rating - perfs?.bullet?.rd) >= 2000)) {
 											prov = true;
 										}
 										lichess_performanceProv = true;
 									}
 
 									if (perfs?.classical?.rating >= 2000) {
-										if ((perfs?.classical?.rd <= 110) || ((perfs?.classical?.rating - perfs?.classical?.rd) >= 2000) ) {
+										if ((perfs?.classical?.rd <= 110) || ((perfs?.classical?.rating - perfs?.classical?.rd) >= 2000)) {
 											prov = true;
 										}
 										lichess_performanceProv = true;
 									}
 
 									if (perfs?.rapid?.rating >= 2000) {
-										if ((perfs?.rapid?.rd <= 110) || ((perfs?.rapid?.rating - perfs?.rapid?.rd) >= 2000) ) {
+										if ((perfs?.rapid?.rd <= 110) || ((perfs?.rapid?.rating - perfs?.rapid?.rd) >= 2000)) {
 											prov = true;
 										}
 										lichess_performanceProv = true;
